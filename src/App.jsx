@@ -187,7 +187,7 @@ export default function App() {
       <main className="main-content">
         {view === "landing" && (
           <div className="animate-fade-in">
-            <Hero setView={handleSetView} />
+            <Hero setView={handleNavigate} />
             <Philosophy />
             <AppointmentForm onAddBooking={handleAddBooking} />
           </div>
@@ -238,11 +238,11 @@ export default function App() {
           <div className="footer-col links-col">
             <h4 className="footer-col-title">Navigazione</h4>
             <ul className="footer-links-list">
-              <li><button onClick={() => handleSetView("landing")}>Home Page</button></li>
-              <li><a href="#philosophy" onClick={() => handleSetView("landing")}>La Nostra Filosofia</a></li>
-              <li><a href="#appointment" onClick={() => handleSetView("landing")}>Prenota un Appuntamento</a></li>
-              <li><button onClick={() => handleSetView("shop")}>Boutique Shop</button></li>
-              <li><button onClick={() => handleSetView("admin")}>Pannello Admin</button></li>
+              <li><button onClick={() => handleNavigate("landing")}>Home Page</button></li>
+              <li><a href="#philosophy" onClick={(e) => { e.preventDefault(); handleNavigate("landing", "philosophy"); }}>La Nostra Filosofia</a></li>
+              <li><a href="#appointment" onClick={(e) => { e.preventDefault(); handleNavigate("landing", "appointment"); }}>Prenota un Appuntamento</a></li>
+              <li><button onClick={() => handleNavigate("shop")}>Boutique Shop</button></li>
+              <li><button onClick={() => handleNavigate("admin")}>Pannello Admin</button></li>
             </ul>
           </div>
 
