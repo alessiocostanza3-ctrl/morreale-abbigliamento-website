@@ -147,10 +147,19 @@ export default function App() {
 
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Smooth scroll helper
-  const handleSetView = (newView) => {
+  // Smooth scroll helper with hash support
+  const handleNavigate = (newView, hash) => {
     setView(newView);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (hash) {
+      setTimeout(() => {
+        const element = document.getElementById(hash.replace("#", ""));
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   return (
@@ -158,7 +167,7 @@ export default function App() {
       {/* Navigation Header */}
       <Navbar 
         currentView={view} 
-        setView={handleSetView} 
+        setView={handleNavigate} 
         cartCount={cartCount} 
         openCart={() => setIsCartOpen(true)} 
       />

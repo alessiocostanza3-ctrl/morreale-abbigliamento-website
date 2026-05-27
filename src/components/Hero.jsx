@@ -170,7 +170,11 @@ export default function Hero({ setView }) {
 
         @media (max-width: 1024px) {
           .hero-section {
-            height: 75vh;
+            height: auto;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-top: calc(var(--navbar-height) + 40px);
+            padding-bottom: 80px;
           }
           
           .hero-pillars {

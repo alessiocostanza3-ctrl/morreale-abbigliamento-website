@@ -32,10 +32,24 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
           >
             Home
           </button>
-          <a href="#philosophy" className="nav-link" onClick={() => setView("landing")}>
+          <a 
+            href="#philosophy" 
+            className="nav-link" 
+            onClick={(e) => {
+              e.preventDefault();
+              setView("landing", "philosophy");
+            }}
+          >
             Filosofia
           </a>
-          <a href="#appointment" className="nav-link" onClick={() => setView("landing")}>
+          <a 
+            href="#appointment" 
+            className="nav-link" 
+            onClick={(e) => {
+              e.preventDefault();
+              setView("landing", "appointment");
+            }}
+          >
             Prenota Visita
           </a>
           <button 
@@ -97,14 +111,22 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
           <a 
             href="#philosophy" 
             className="mobile-nav-link" 
-            onClick={() => { setView("landing"); setIsMobileOpen(false); }}
+            onClick={(e) => {
+              e.preventDefault();
+              setView("landing", "philosophy");
+              setIsMobileOpen(false);
+            }}
           >
             La Nostra Filosofia
           </a>
           <a 
             href="#appointment" 
             className="mobile-nav-link" 
-            onClick={() => { setView("landing"); setIsMobileOpen(false); }}
+            onClick={(e) => {
+              e.preventDefault();
+              setView("landing", "appointment");
+              setIsMobileOpen(false);
+            }}
           >
             Prenota un Appuntamento
           </a>
@@ -135,11 +157,13 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
           align-items: center;
           z-index: 100;
           transition: var(--transition-smooth);
-          border-bottom: 1px solid transparent;
+          background-color: rgba(252, 250, 247, 0.92);
+          backdrop-filter: blur(12px);
+          border-bottom: 1px solid var(--border-color);
         }
 
         .nav-header.scrolled {
-          background-color: rgba(252, 250, 247, 0.85);
+          background-color: rgba(252, 250, 247, 0.95);
           backdrop-filter: blur(12px);
           border-bottom: 1px solid var(--border-color);
           height: 70px;
@@ -290,7 +314,6 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
         }
 
         .mobile-menu-trigger {
-          display: none;
           background: transparent;
           border: none;
           cursor: pointer;
@@ -362,6 +385,7 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
           justify-content: center;
           transform: translateY(-100%);
           transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          overflow-y: auto;
         }
 
         .mobile-nav-drawer.open {
@@ -374,7 +398,9 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
           align-items: center;
           gap: 24px;
           width: 100%;
-          padding: 40px;
+          padding: 80px 40px 40px 40px;
+          max-height: 100%;
+          overflow-y: auto;
         }
 
         .mobile-nav-link {
