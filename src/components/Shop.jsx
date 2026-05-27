@@ -1,0 +1,645 @@
+import React, { useState, useMemo } from "react";
+
+export default function Shop({ products, onAddToCart }) {
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("default");
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  
+  // Details Selection State
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
+
+  const categories = [
+    { id: "all", label: "Tutte le Collezioni" },
+    { id: "cerimonia", label: "Cerimonia" },
+    { id: "casual", label: "Casual Raffinato" },
+    { id: "intimo", label: "Intimo Elegante" },
+    { id: "accessori", label: "Accessori" }
+  ];
+
+  // Filters & Sorting logic
+  const filteredProducts = useMemo(() => {
+    let result = [...products];
+
+    // Filter by Category
+    if (selectedCategory !== "all") {
+      result = result.filter((p) => p.category === selectedCategory);
+    }
+
+    // Filter by Search Query
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q) ||
+          p.fabric.toLowerCase().includes(q)
+      );
+    }
+
+    // Sorting
+    if (sortBy === "price-asc") {
+      result.sort((a, b) => a.price - b.price);
+    } else if (sortBy === "price-desc") {
+      result.sort((a, b) => b.price - a.price);
+    }
+
+    return result;
+  }, [products, selectedCategory, searchQuery, sortBy]);
+
+  const handleOpenDetail = (product) => {
+    setSelectedProduct(product);
+    setSelectedSize(product.sizes ? product.sizes[0] : "");
+    setSelectedColor(product.colors ? product.colors[0] : "");
+  };
+
+  const handleCloseDetail = () => {
+    setSelectedProduct(null);
+  };
+
+  const handleAddToCart = () => {
+    if (!selectedProduct) return;
+    onAddToCart(selectedProduct, selectedSize, selectedColor);
+    handleCloseDetail();
+  };
+
+  return (
+    <section className="section shop-section">
+      <div className="container">
+        
+        <div className="shop-header">
+          <span className="shop-tag">Collezioni Morreale</span>
+          <h2 className="shop-title">L'Eleganza da Indossare</h2>
+          <p className="shop-subtitle">
+            Capi sartoriali, tessuti di pregio e abiti da cerimonia. Esplora le nostre collezioni e ordina in tutta sicurezza.
+          </p>
+        </div>
+
+        {/* Filters Panel */}
+        <div className="filters-panel">
+          <div className="category-tabs">
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                className={`category-tab ${selectedCategory === cat.id ? "active" : ""}`}
+                onClick={() => setSelectedCategory(cat.id)}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="search-sort-bar">
+            <div className="search-input-wrapper">
+              <svg className="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="text"
+                className="shop-search-input"
+                placeholder="Cerca per tessuto o abito..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+            <div className="sort-wrapper">
+              <label htmlFor="sort" className="sort-label">Ordina:</label>
+              <select
+                id="sort"
+                className="shop-sort-select"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <option value="default">In Evidenza</option>
+                <option value="price-asc">Prezzo: Minore a Maggiore</option>
+                <option value="price-desc">Prezzo: Maggiore a Minore</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Product Grid */}
+        {filteredProducts.length === 0 ? (
+          <div className="shop-empty">
+            <p>Nessun capo corrisponde ai criteri di ricerca selezionati.</p>
+            <button className="btn btn-outline" onClick={() => { setSelectedCategory("all"); setSearchQuery(""); }}>
+              Reimposta Filtri
+            </button>
+          </div>
+        ) : (
+          <div className="grid-4 products-grid">
+            {filteredProducts.map((product) => (
+              <div 
+                key={product.id} 
+                className="product-card"
+                onClick={() => handleOpenDetail(product)}
+              >
+                <div className="product-image-wrapper">
+                  <img 
+                    src={product.imageUrl} 
+                    alt={product.name} 
+                    className="product-card-img"
+                    loading="lazy"
+                  />
+                  <div className="card-hover-overlay">
+                    <span className="overlay-btn-text">Visualizza Dettagli</span>
+                  </div>
+                  <span className="product-card-category">{product.category}</span>
+                </div>
+                <div className="product-card-info">
+                  <span className="product-card-fabric">{product.fabric.split(" ")[0]} {product.fabric.split(" ")[1] || ""}</span>
+                  <h3 className="product-card-title">{product.name}</h3>
+                  <span className="product-card-price">€{product.price}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Product Detail Modal */}
+      {selectedProduct && (
+        <div className="modal-overlay" onClick={handleCloseDetail}>
+          <div className="modal-content product-detail-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={handleCloseDetail} aria-label="Chiudi">×</button>
+            
+            <div className="grid-2 modal-grid">
+              <div className="modal-image-col">
+                <img 
+                  src={selectedProduct.imageUrl} 
+                  alt={selectedProduct.name} 
+                  className="modal-product-img"
+                />
+              </div>
+
+              <div className="modal-info-col">
+                <span className="modal-category">{selectedProduct.category}</span>
+                <h2 className="modal-title">{selectedProduct.name}</h2>
+                <span className="modal-price">€{selectedProduct.price}</span>
+                
+                <div className="modal-divider"></div>
+                
+                <p className="modal-desc">{selectedProduct.description}</p>
+                
+                <div className="modal-meta-row">
+                  <strong>Tessuto / Composizione:</strong>
+                  <span>{selectedProduct.fabric}</span>
+                </div>
+
+                {/* Size Selector */}
+                {selectedProduct.sizes && selectedProduct.sizes.length > 0 && (
+                  <div className="selection-group">
+                    <span className="selection-label">Taglia Disponibile:</span>
+                    <div className="options-row">
+                      {selectedProduct.sizes.map((size) => (
+                        <button
+                          key={size}
+                          className={`option-btn ${selectedSize === size ? "selected" : ""}`}
+                          onClick={() => setSelectedSize(size)}
+                        >
+                          {size}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Color Selector */}
+                {selectedProduct.colors && selectedProduct.colors.length > 0 && (
+                  <div className="selection-group">
+                    <span className="selection-label">Colore:</span>
+                    <div className="options-row">
+                      {selectedProduct.colors.map((color) => (
+                        <button
+                          key={color}
+                          className={`option-btn ${selectedColor === color ? "selected" : ""}`}
+                          onClick={() => setSelectedColor(color)}
+                        >
+                          {color}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="modal-action-row">
+                  <button className="btn btn-primary modal-buy-btn" onClick={handleAddToCart}>
+                    Aggiungi al Carrello
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        .shop-section {
+          background-color: var(--bg-primary);
+          padding-top: calc(var(--navbar-height) + 40px);
+        }
+
+        .shop-header {
+          text-align: center;
+          margin-bottom: 60px;
+        }
+
+        .shop-tag {
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 0.25em;
+          color: var(--accent-terracotta);
+          font-weight: 600;
+          display: block;
+          margin-bottom: 12px;
+        }
+
+        .shop-title {
+          font-family: var(--font-serif);
+          margin-bottom: 16px;
+        }
+
+        .shop-subtitle {
+          font-size: 16px;
+          color: var(--text-secondary);
+          max-width: 600px;
+          margin: 0 auto;
+        }
+
+        /* Filters and Options */
+        .filters-panel {
+          border-bottom: 1px solid var(--border-color);
+          padding-bottom: 24px;
+          margin-bottom: 40px;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .category-tabs {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+          justify-content: center;
+        }
+
+        .category-tab {
+          background-color: transparent;
+          border: 1px solid var(--border-color);
+          color: var(--text-secondary);
+          padding: 8px 20px;
+          font-size: 13px;
+          font-family: var(--font-sans);
+          letter-spacing: 0.05em;
+          cursor: pointer;
+          transition: var(--transition-smooth);
+        }
+
+        .category-tab:hover,
+        .category-tab.active {
+          border-color: var(--accent-terracotta);
+          color: var(--text-primary);
+        }
+
+        .category-tab.active {
+          background-color: var(--accent-terracotta-light);
+          color: var(--accent-terracotta);
+          font-weight: 500;
+        }
+
+        .search-sort-bar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 20px;
+          flex-wrap: wrap;
+        }
+
+        .search-input-wrapper {
+          position: relative;
+          width: 320px;
+          max-width: 100%;
+        }
+
+        .search-icon {
+          position: absolute;
+          left: 14px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--text-muted);
+        }
+
+        .shop-search-input {
+          width: 100%;
+          padding: 10px 14px 10px 42px;
+          background-color: var(--white);
+          border: 1px solid var(--border-color);
+          font-family: var(--font-sans);
+          font-size: 14px;
+          outline: none;
+          transition: var(--transition-fast);
+        }
+
+        .shop-search-input:focus {
+          border-color: var(--accent-terracotta);
+        }
+
+        .sort-wrapper {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .sort-label {
+          font-size: 13px;
+          color: var(--text-secondary);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .shop-sort-select {
+          padding: 10px 14px;
+          background-color: var(--white);
+          border: 1px solid var(--border-color);
+          font-family: var(--font-sans);
+          font-size: 13px;
+          color: var(--text-primary);
+          outline: none;
+          cursor: pointer;
+        }
+
+        /* Product Cards */
+        .products-grid {
+          row-gap: 40px;
+        }
+
+        .product-card {
+          text-align: left;
+          cursor: pointer;
+          background-color: var(--white);
+          border: 1px solid transparent;
+          padding: 10px;
+          transition: var(--transition-smooth);
+        }
+
+        .product-card:hover {
+          border-color: var(--border-color);
+          box-shadow: var(--shadow-sm);
+          transform: translateY(-4px);
+        }
+
+        .product-image-wrapper {
+          position: relative;
+          height: 380px;
+          overflow: hidden;
+          background-color: var(--bg-secondary);
+        }
+
+        .product-card-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.6s ease;
+        }
+
+        .product-card:hover .product-card-img {
+          transform: scale(1.04);
+        }
+
+        .card-hover-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(28, 27, 26, 0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          transition: var(--transition-fast);
+        }
+
+        .product-card:hover .card-hover-overlay {
+          opacity: 1;
+        }
+
+        .overlay-btn-text {
+          background-color: var(--bg-primary);
+          color: var(--text-primary);
+          padding: 10px 20px;
+          font-size: 12px;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+        }
+
+        .product-card-category {
+          position: absolute;
+          top: 15px;
+          left: 15px;
+          background-color: var(--white);
+          color: var(--text-primary);
+          font-size: 10px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          padding: 4px 8px;
+          border: 1px solid var(--border-color);
+        }
+
+        .product-card-info {
+          padding-top: 15px;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .product-card-fabric {
+          font-size: 11px;
+          text-transform: uppercase;
+          color: var(--accent-olive);
+          letter-spacing: 0.05em;
+          font-weight: 500;
+        }
+
+        .product-card-title {
+          font-family: var(--font-serif);
+          font-size: 18px;
+          line-height: 1.2;
+          font-weight: 400;
+          color: var(--text-primary);
+        }
+
+        .product-card-price {
+          font-family: var(--font-sans);
+          font-size: 16px;
+          font-weight: 500;
+          color: var(--accent-terracotta);
+        }
+
+        .shop-empty {
+          text-align: center;
+          padding: 80px 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 20px;
+        }
+
+        /* Detail Modal Styles */
+        .product-detail-modal {
+          max-width: 960px;
+        }
+
+        .modal-grid {
+          gap: 0;
+        }
+
+        .modal-image-col {
+          height: 600px;
+          background-color: var(--bg-secondary);
+        }
+
+        .modal-product-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .modal-info-col {
+          padding: 50px;
+          text-align: left;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .modal-category {
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: var(--accent-olive);
+          font-weight: 600;
+          margin-bottom: 10px;
+        }
+
+        .modal-title {
+          font-size: 32px;
+          line-height: 1.15;
+          margin-bottom: 10px;
+        }
+
+        .modal-price {
+          font-size: 24px;
+          color: var(--accent-terracotta);
+          font-weight: 500;
+          margin-bottom: 20px;
+        }
+
+        .modal-divider {
+          height: 1px;
+          background-color: var(--border-color);
+          margin-bottom: 24px;
+        }
+
+        .modal-desc {
+          font-size: 15px;
+          line-height: 1.6;
+          color: var(--text-secondary);
+          margin-bottom: 20px;
+        }
+
+        .modal-meta-row {
+          font-size: 14px;
+          margin-bottom: 30px;
+          display: flex;
+          gap: 8px;
+        }
+
+        .modal-meta-row strong {
+          font-weight: 500;
+          color: var(--text-primary);
+        }
+
+        .modal-meta-row span {
+          color: var(--text-secondary);
+        }
+
+        .selection-group {
+          margin-bottom: 24px;
+        }
+
+        .selection-label {
+          display: block;
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: var(--text-muted);
+          margin-bottom: 10px;
+          font-weight: 500;
+        }
+
+        .options-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .option-btn {
+          background-color: var(--white);
+          border: 1px solid var(--border-color);
+          color: var(--text-primary);
+          padding: 8px 16px;
+          font-size: 13px;
+          font-family: var(--font-sans);
+          cursor: pointer;
+          transition: var(--transition-fast);
+        }
+
+        .option-btn:hover {
+          border-color: var(--text-primary);
+        }
+
+        .option-btn.selected {
+          border-color: var(--accent-terracotta);
+          background-color: var(--accent-terracotta-light);
+          color: var(--accent-terracotta);
+          font-weight: 500;
+        }
+
+        .modal-action-row {
+          margin-top: auto;
+          padding-top: 20px;
+        }
+
+        .modal-buy-btn {
+          width: 100%;
+        }
+
+        @media (max-width: 1024px) {
+          .modal-image-col {
+            height: 400px;
+          }
+          
+          .modal-info-col {
+            padding: 30px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .modal-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .modal-image-col {
+            height: 350px;
+          }
+        }
+      `}</style>
+    </section>
+  );
+}
