@@ -15,53 +15,64 @@ export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   
   const [products, setProducts] = useState(() => {
-    const saved = localStorage.getItem("morreale_products");
-    if (saved) {
-      try {
+    try {
+      const saved = localStorage.getItem("morreale_products");
+      if (saved) {
         const parsed = JSON.parse(saved);
-        return parsed.map(savedProd => {
-          const match = initialProducts.find(ip => ip.id === savedProd.id);
-          return match ? { ...savedProd, imageUrl: match.imageUrl } : savedProd;
-        });
-      } catch (e) {
-        console.error(e);
+        if (Array.isArray(parsed)) {
+          return parsed.map(savedProd => {
+            const match = initialProducts.find(ip => ip.id === savedProd.id);
+            return match ? { ...savedProd, imageUrl: match.imageUrl } : savedProd;
+          });
+        }
       }
+    } catch (e) {
+      console.error("Errore caricamento prodotti da localStorage:", e);
     }
     return initialProducts;
   });
 
   const [cart, setCart] = useState(() => {
-    const saved = localStorage.getItem("morreale_cart");
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error(e);
+    try {
+      const saved = localStorage.getItem("morreale_cart");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
       }
+    } catch (e) {
+      console.error("Errore caricamento carrello da localStorage:", e);
     }
     return [];
   });
 
   const [orders, setOrders] = useState(() => {
-    const saved = localStorage.getItem("morreale_orders");
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error(e);
+    try {
+      const saved = localStorage.getItem("morreale_orders");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
       }
+    } catch (e) {
+      console.error("Errore caricamento ordini da localStorage:", e);
     }
     return [];
   });
 
   const [bookings, setBookings] = useState(() => {
-    const saved = localStorage.getItem("morreale_bookings");
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error(e);
+    try {
+      const saved = localStorage.getItem("morreale_bookings");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
       }
+    } catch (e) {
+      console.error("Errore caricamento appuntamenti da localStorage:", e);
     }
     return [];
   });
