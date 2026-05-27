@@ -1140,6 +1140,51 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
             padding: 12px 16px;
           }
         }
+
+        @media (max-width: 600px) {
+          .admin-dashboard-section {
+            padding-top: calc(var(--navbar-height) + 15px);
+          }
+
+          .admin-title-area h2 {
+            font-size: 24px;
+          }
+
+          .stat-card {
+            padding: 16px;
+          }
+
+          .stat-value {
+            font-size: 22px;
+          }
+
+          .admin-crud-modal {
+            padding: 20px !important;
+          }
+
+          .login-box {
+            padding: 24px 16px !important;
+          }
+
+          .order-log-body, 
+          .booking-details-body {
+            padding: 16px !important;
+          }
+
+          .order-status-actions,
+          .booking-status-actions {
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
+            gap: 8px;
+          }
+
+          .order-action-btn,
+          .booking-action-btn {
+            width: 100%;
+            text-align: center;
+          }
+        }
       `}</style>
     </section>
   );

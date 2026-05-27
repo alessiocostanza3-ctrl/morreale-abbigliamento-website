@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 export default function Navbar({ currentView, setView, cartCount, openCart }) {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,7 +19,7 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
   return (
     <header className={`nav-header ${isScrolled ? "scrolled" : ""}`}>
       <div className="container nav-container">
-        <div className="nav-brand" onClick={() => setView("landing")}>
+        <div className="nav-brand" onClick={() => { setView("landing"); setIsMobileOpen(false); }}>
           <span className="brand-sub">Sartoria Italiana</span>
           <span className="brand-main">Morreale</span>
           <span className="brand-location">Licata</span>
@@ -71,8 +72,57 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
             </svg>
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </button>
+
+          <button 
+            className={`mobile-menu-trigger ${isMobileOpen ? "open" : ""}`}
+            onClick={() => setIsMobileOpen(!isMobileOpen)}
+            aria-label="Menu"
+          >
+            <span className="hamburger-box">
+              <span className="hamburger-inner"></span>
+            </span>
+          </button>
         </div>
       </div>
+
+      {/* Mobile Navigation Drawer */}
+      <div className={`mobile-nav-drawer ${isMobileOpen ? "open" : ""}`}>
+        <div className="mobile-nav-content">
+          <button 
+            className="mobile-nav-link" 
+            onClick={() => { setView("landing"); setIsMobileOpen(false); }}
+          >
+            Home
+          </button>
+          <a 
+            href="#philosophy" 
+            className="mobile-nav-link" 
+            onClick={() => { setView("landing"); setIsMobileOpen(false); }}
+          >
+            La Nostra Filosofia
+          </a>
+          <a 
+            href="#appointment" 
+            className="mobile-nav-link" 
+            onClick={() => { setView("landing"); setIsMobileOpen(false); }}
+          >
+            Prenota un Appuntamento
+          </a>
+          <button 
+            className="mobile-nav-link" 
+            onClick={() => { setView("shop"); setIsMobileOpen(false); }}
+          >
+            Boutique Shop
+          </button>
+          <button 
+            className="mobile-nav-link mobile-nav-admin" 
+            onClick={() => { setView("admin"); setIsMobileOpen(false); }}
+          >
+            Area Riservata (Admin)
+          </button>
+        </div>
+      </div>
+
 
       <style>{`
         .nav-header {
@@ -239,13 +289,148 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
           justify-content: center;
         }
 
+        .mobile-menu-trigger {
+          display: none;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          padding: 8px;
+          z-index: 1002;
+          position: relative;
+          display: none;
+        }
+
+        .hamburger-box {
+          width: 24px;
+          height: 18px;
+          display: inline-block;
+          position: relative;
+        }
+
+        .hamburger-inner,
+        .hamburger-inner::before,
+        .hamburger-inner::after {
+          width: 24px;
+          height: 1.5px;
+          background-color: var(--text-primary);
+          position: absolute;
+          transition: transform 0.25s ease, background-color 0.25s ease;
+        }
+
+        .hamburger-inner {
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        .hamburger-inner::before {
+          content: "";
+          top: -7px;
+          left: 0;
+        }
+
+        .hamburger-inner::after {
+          content: "";
+          bottom: -7px;
+          left: 0;
+        }
+
+        /* Hamburger open state */
+        .mobile-menu-trigger.open .hamburger-inner {
+          background-color: transparent;
+        }
+
+        .mobile-menu-trigger.open .hamburger-inner::before {
+          transform: translateY(7px) rotate(45deg);
+        }
+
+        .mobile-menu-trigger.open .hamburger-inner::after {
+          transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* Mobile drawer */
+        .mobile-nav-drawer {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100vh;
+          background-color: rgba(252, 250, 247, 0.98);
+          backdrop-filter: blur(16px);
+          z-index: 1001;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transform: translateY(-100%);
+          transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .mobile-nav-drawer.open {
+          transform: translateY(0);
+        }
+
+        .mobile-nav-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 24px;
+          width: 100%;
+          padding: 40px;
+        }
+
+        .mobile-nav-link {
+          font-family: var(--font-serif);
+          font-size: 26px;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: var(--text-primary);
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          transition: var(--transition-fast);
+          padding: 5px 0;
+          text-align: center;
+        }
+
+        .mobile-nav-link:hover {
+          color: var(--accent-terracotta);
+        }
+
+        .mobile-nav-admin {
+          font-family: var(--font-sans);
+          font-size: 14px;
+          color: var(--accent-olive);
+          border: 1px solid var(--accent-olive);
+          padding: 10px 24px;
+          margin-top: 15px;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          font-weight: 500;
+        }
+
+        .mobile-nav-admin:hover {
+          background-color: var(--accent-olive);
+          color: var(--white);
+        }
+
         @media (max-width: 768px) {
           .nav-menu {
-            display: none; /* simple responsive fallback - menu accessible via view toggles */
+            display: none;
+          }
+          
+          .nav-admin-link {
+            display: none;
+          }
+
+          .mobile-menu-trigger {
+            display: block;
           }
           
           .brand-main {
             font-size: 20px;
+          }
+
+          .nav-actions {
+            gap: 12px;
           }
         }
       `}</style>

@@ -639,6 +639,110 @@ export default function Shop({ products, onAddToCart }) {
             height: 350px;
           }
         }
+
+        @media (max-width: 600px) {
+          .shop-section {
+            padding-top: calc(var(--navbar-height) + 15px);
+          }
+
+          .shop-header {
+            margin-bottom: 30px;
+          }
+
+          .filters-panel {
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+          }
+
+          .category-tabs {
+            justify-content: flex-start;
+            overflow-x: auto;
+            flex-wrap: nowrap;
+            padding-bottom: 8px;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+          }
+
+          .category-tab {
+            flex: 0 0 auto;
+            padding: 6px 14px;
+            font-size: 12px;
+          }
+
+          .search-sort-bar {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+          }
+
+          .search-input-wrapper {
+            width: 100%;
+          }
+
+          .sort-wrapper {
+            justify-content: space-between;
+            width: 100%;
+          }
+
+          .products-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+            row-gap: 20px !important;
+          }
+
+          .product-card {
+            padding: 6px;
+          }
+
+          .product-image-wrapper {
+            height: 200px;
+          }
+
+          .product-card-info {
+            padding-top: 8px;
+            gap: 4px;
+          }
+
+          .product-card-title {
+            font-size: 14px;
+          }
+
+          .product-card-price {
+            font-size: 13px;
+          }
+
+          .product-card-fabric {
+            font-size: 9px;
+          }
+
+          .modal-info-col {
+            padding: 20px;
+          }
+
+          .modal-title {
+            font-size: 24px;
+          }
+
+          .modal-price {
+            font-size: 20px;
+            margin-bottom: 12px;
+          }
+
+          .modal-desc {
+            font-size: 13px;
+            margin-bottom: 15px;
+          }
+
+          .options-row {
+            gap: 6px;
+          }
+
+          .option-btn {
+            padding: 6px 12px;
+            font-size: 11px;
+          }
+        }
       `}</style>
     </section>
   );

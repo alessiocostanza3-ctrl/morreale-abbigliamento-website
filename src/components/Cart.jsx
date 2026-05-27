@@ -507,6 +507,33 @@ export default function Cart({ isOpen, onClose, cartItems, onUpdateQuantity, onR
           font-size: 13px;
           color: var(--text-muted);
         }
+
+        @media (max-width: 480px) {
+          .cart-panel {
+            padding: 20px !important;
+          }
+          
+          .cart-title {
+            font-size: 22px;
+          }
+          
+          .cart-item {
+            gap: 10px;
+          }
+          
+          .cart-item-img {
+            width: 60px;
+            height: 78px;
+          }
+          
+          .cart-item-name {
+            font-size: 14px;
+          }
+          
+          .checkout-form-title {
+            font-size: 16px;
+          }
+        }
       `}</style>
     </div>
   );
