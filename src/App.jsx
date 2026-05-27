@@ -21,10 +21,12 @@ export default function App() {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
-          return parsed.map(savedProd => {
+          const savedMapped = parsed.map(savedProd => {
             const match = initialProducts.find(ip => ip.id === savedProd.id);
             return match ? { ...savedProd, imageUrl: match.imageUrl, colorImages: match.colorImages } : savedProd;
           });
+          const newProducts = initialProducts.filter(ip => !parsed.some(sp => sp.id === ip.id));
+          return [...savedMapped, ...newProducts];
         }
       }
     } catch (e) {
