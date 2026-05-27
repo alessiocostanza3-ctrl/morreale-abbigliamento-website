@@ -41,7 +41,7 @@ export const initialProducts = [
     fabric: "100% Lino Organico certificato",
     sizes: ["39", "40", "41", "42", "43", "44"],
     colors: ["Bianco Ottico", "Azzurro Polvere", "Lino Naturale"],
-    imageUrl: "https://images.unsplash.com/photo-1621072156002-e2fcc10d9714?q=80&w=800&auto=format&fit=crop"
+    imageUrl: "https://images.unsplash.com/photo-1603252109303-2751441dd157?q=80&w=800&auto=format&fit=crop"
   },
   {
     id: "prod-5",
