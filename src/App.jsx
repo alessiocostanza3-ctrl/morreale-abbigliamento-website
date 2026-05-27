@@ -23,7 +23,7 @@ export default function App() {
         if (Array.isArray(parsed)) {
           return parsed.map(savedProd => {
             const match = initialProducts.find(ip => ip.id === savedProd.id);
-            return match ? { ...savedProd, imageUrl: match.imageUrl } : savedProd;
+            return match ? { ...savedProd, imageUrl: match.imageUrl, colorImages: match.colorImages } : savedProd;
           });
         }
       }

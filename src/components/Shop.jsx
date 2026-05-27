@@ -169,7 +169,7 @@ export default function Shop({ products, onAddToCart }) {
             <div className="grid-2 modal-grid">
               <div className="modal-image-col">
                 <img 
-                  src={selectedProduct.imageUrl} 
+                  src={(selectedProduct.colorImages && selectedProduct.colorImages[selectedColor]) || selectedProduct.imageUrl} 
                   alt={selectedProduct.name} 
                   className="modal-product-img"
                 />
