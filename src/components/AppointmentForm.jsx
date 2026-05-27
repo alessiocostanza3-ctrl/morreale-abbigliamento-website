@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { OWNER_CONFIG } from "../config/ownerConfig";
 
 export default function AppointmentForm({ onAddBooking }) {
+  const [submittedData, setSubmittedData] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -47,6 +49,7 @@ export default function AppointmentForm({ onAddBooking }) {
     };
 
     onAddBooking(newBooking);
+    setSubmittedData(newBooking);
     setIsSubmitted(true);
 
     // Reset form
@@ -59,10 +62,6 @@ export default function AppointmentForm({ onAddBooking }) {
       service: "Consulenza Abito da Sposo / Cerimonia",
       notes: ""
     });
-
-    setTimeout(() => {
-      setIsSubmitted(false);
-    }, 5000);
   };
 
   return (
@@ -78,16 +77,60 @@ export default function AppointmentForm({ onAddBooking }) {
         </div>
 
         <div className="appointment-box">
-          {isSubmitted ? (
+          {isSubmitted && submittedData ? (
             <div className="appointment-success animate-fade-in">
-              <div className="success-icon">
+              <div className="success-icon" style={{ color: "var(--success)" }}>
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                   <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
               </div>
-              <h3>Richiesta Inviata con Successo</h3>
-              <p>Grazie per aver scelto Morreale Abbigliamento. Ti contatteremo telefonicamente entro 24 ore per confermare il giorno e l'orario del tuo appuntamento.</p>
+              <h3>Richiesta Appuntamento Registrata</h3>
+              <p style={{ marginBottom: "20px" }}>La richiesta è stata inserita nel nostro database ed è in attesa di conferma.</p>
+              
+              <div className="success-details-box" style={{ textAlign: "left", padding: "20px", backgroundColor: "var(--bg-secondary)", border: "1px solid var(--border-color)", marginBottom: "20px" }}>
+                <p style={{ fontSize: "14px", marginBottom: "4px" }}><strong>Cliente:</strong> {submittedData.name}</p>
+                <p style={{ fontSize: "14px", marginBottom: "4px" }}><strong>Servizio:</strong> {submittedData.service}</p>
+                <p style={{ fontSize: "14px", marginBottom: "4px" }}><strong>Giorno:</strong> {submittedData.date} alle {submittedData.timeSlot}</p>
+              </div>
+
+              <p style={{ fontSize: "13px", color: "var(--text-muted)", marginBottom: "15px" }}>
+                Per confermare rapidamente con {OWNER_CONFIG.name}, inviagli i dettagli con un clic:
+              </p>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px", maxWidth: "340px", margin: "0 auto" }}>
+                <button 
+                  className="btn btn-primary" 
+                  style={{ backgroundColor: "#25D366", borderColor: "#25D366" }}
+                  onClick={() => {
+                    const text = `Salve ${OWNER_CONFIG.name}, vorrei richiedere un appuntamento in Boutique:\n\n• Cliente: ${submittedData.name}\n• Telefono: ${submittedData.phone}\n• Servizio: ${submittedData.service}\n• Giorno: ${submittedData.date}\n• Orario: ${submittedData.timeSlot}\n• Note: ${submittedData.notes || "Nessuna"}`;
+                    window.open(`https://wa.me/${OWNER_CONFIG.whatsapp}?text=${encodeURIComponent(text)}`, "_blank");
+                  }}
+                >
+                  Invia su WhatsApp
+                </button>
+                <button 
+                  className="btn btn-outline" 
+                  onClick={() => {
+                    const subject = `Richiesta Appuntamento - ${submittedData.name}`;
+                    const body = `Salve ${OWNER_CONFIG.name},\n\nVorrei richiedere un appuntamento in Boutique:\n\n• Cliente: ${submittedData.name}\n• Telefono: ${submittedData.phone}\n• Servizio: ${submittedData.service}\n• Giorno: ${submittedData.date}\n• Orario: ${submittedData.timeSlot}\n• Note: ${submittedData.notes || "Nessuna"}`;
+                    window.open(`mailto:${OWNER_CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, "_blank");
+                  }}
+                >
+                  Richiedi via Email
+                </button>
+                
+                <button 
+                  className="btn btn-text" 
+                  style={{ marginTop: "15px" }}
+                  onClick={() => {
+                    setIsSubmitted(false);
+                    setSubmittedData(null);
+                  }}
+                >
+                  Prenota un altro appuntamento
+                </button>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="appointment-form">

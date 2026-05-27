@@ -7,6 +7,7 @@ import Shop from "./components/Shop";
 import Cart from "./components/Cart";
 import AdminPanel from "./components/AdminPanel";
 import { initialProducts } from "./data/initialProducts";
+import { OWNER_CONFIG } from "./config/ownerConfig";
 import "./App.css";
 
 export default function App() {
@@ -261,13 +262,13 @@ export default function App() {
           <div className="footer-col contact-col">
             <h4 className="footer-col-title">Contatti &amp; Boutique</h4>
             <p className="footer-info-text">
-              Corso Vittorio Emanuele, 120<br />
-              92019 Licata (Agrigento)<br />
-              Sicilia, Italia
+              {OWNER_CONFIG.address.street}<br />
+              {OWNER_CONFIG.address.zip} {OWNER_CONFIG.address.city} ({OWNER_CONFIG.address.province})<br />
+              {OWNER_CONFIG.address.region}, {OWNER_CONFIG.address.country}
             </p>
             <p className="footer-info-text" style={{ marginTop: "12px" }}>
-              <strong>Telefono:</strong> +39 0922 856789<br />
-              <strong>Email:</strong> info@morrealeabbigliamento.it
+              <strong>Telefono:</strong> {OWNER_CONFIG.phone}<br />
+              <strong>Email:</strong> {OWNER_CONFIG.email}
             </p>
           </div>
 

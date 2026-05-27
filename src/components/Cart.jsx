@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { OWNER_CONFIG } from "../config/ownerConfig";
 
 export default function Cart({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveFromCart, onPlaceOrder }) {
   const [customerInfo, setCustomerInfo] = useState({
@@ -73,12 +74,9 @@ export default function Cart({ isOpen, onClose, cartItems, onUpdateQuantity, onR
     // Send actions
     const encodedText = encodeURIComponent(orderSummary);
     if (method === "whatsapp") {
-      // Licata store default mock number or empty number
-      const shopNumber = "393470000000"; // Placeholder whatsapp
-      window.open(`https://wa.me/${shopNumber}?text=${encodedText}`, "_blank");
+      window.open(`https://wa.me/${OWNER_CONFIG.whatsapp}?text=${encodedText}`, "_blank");
     } else if (method === "email") {
-      const shopEmail = "ordini@morrealeabbigliamento.it";
-      window.open(`mailto:${shopEmail}?subject=Nuovo Ordine ${orderId}&body=${encodedText}`, "_blank");
+      window.open(`mailto:${OWNER_CONFIG.email}?subject=Nuovo Ordine ${orderId}&body=${encodedText}`, "_blank");
     }
   };
 

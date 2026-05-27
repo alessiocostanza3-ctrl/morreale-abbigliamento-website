@@ -70,6 +70,21 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
     setIsAdding(true);
   };
 
+  const handleDuplicateProduct = (product) => {
+    setCurrentProduct(null);
+    setProductForm({
+      name: `${product.name} (Copia)`,
+      category: product.category,
+      price: product.price,
+      description: product.description,
+      fabric: product.fabric,
+      sizes: product.sizes.join(", "),
+      colors: product.colors.join(", "),
+      imageUrl: product.imageUrl
+    });
+    setIsAdding(true);
+  };
+
   const handleSaveProduct = (e) => {
     e.preventDefault();
     if (!productForm.name || !productForm.fabric || productForm.price <= 0) {
@@ -395,6 +410,7 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
                       <td>
                         <div className="table-actions">
                           <button className="table-action-btn edit-btn" onClick={() => openEditModal(product)}>Modifica</button>
+                          <button className="table-action-btn duplicate-btn" onClick={() => handleDuplicateProduct(product)}>Duplica</button>
                           <button className="table-action-btn delete-btn" onClick={() => handleDeleteProduct(product.id)}>Elimina</button>
                         </div>
                       </td>
@@ -606,6 +622,18 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
                     placeholder="Es: 100% Lana Vergine Loro Piana"
                     required
                   />
+                  <div className="preset-badges">
+                    {["100% Lana", "100% Cotone", "100% Seta", "Misto Lino", "Cashmere"].map(fab => (
+                      <button 
+                        key={fab} 
+                        type="button" 
+                        className={`preset-badge ${productForm.fabric === fab ? 'active' : ''}`}
+                        onClick={() => setProductForm({ ...productForm, fabric: fab })}
+                      >
+                        {fab}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -620,6 +648,31 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
                     onChange={e => setProductForm({ ...productForm, sizes: e.target.value })}
                     placeholder="Es: 46, 48, 50, 52"
                   />
+                  <div className="preset-badges">
+                    {["46", "48", "50", "52", "54", "S", "M", "L", "XL", "XXL"].map(size => {
+                      const isSelected = (productForm.sizes || "").split(",").map(s => s.trim()).includes(size);
+                      return (
+                        <button 
+                          key={size} 
+                          type="button" 
+                          className={`preset-badge ${isSelected ? 'active' : ''}`}
+                          onClick={() => {
+                            const currentVal = productForm.sizes || "";
+                            const items = currentVal.split(",").map(s => s.trim()).filter(Boolean);
+                            const idx = items.indexOf(size);
+                            if (idx > -1) {
+                              items.splice(idx, 1);
+                            } else {
+                              items.push(size);
+                            }
+                            setProductForm({ ...productForm, sizes: items.join(", ") });
+                          }}
+                        >
+                          {size}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
                 <div className="form-group">
                   <label className="form-label" htmlFor="prod-colors">Colori Disponibili (separati da virgola)</label>
@@ -631,6 +684,31 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
                     onChange={e => setProductForm({ ...productForm, colors: e.target.value })}
                     placeholder="Es: Blu Notte, Nero, Grigio"
                   />
+                  <div className="preset-badges">
+                    {["Blu Notte", "Nero", "Grigio Antracite", "Bianco", "Marrone", "Sabbia", "Beige", "Verde Bosco"].map(color => {
+                      const isSelected = (productForm.colors || "").split(",").map(s => s.trim()).includes(color);
+                      return (
+                        <button 
+                          key={color} 
+                          type="button" 
+                          className={`preset-badge ${isSelected ? 'active' : ''}`}
+                          onClick={() => {
+                            const currentVal = productForm.colors || "";
+                            const items = currentVal.split(",").map(s => s.trim()).filter(Boolean);
+                            const idx = items.indexOf(color);
+                            if (idx > -1) {
+                              items.splice(idx, 1);
+                            } else {
+                              items.push(color);
+                            }
+                            setProductForm({ ...productForm, colors: items.join(", ") });
+                          }}
+                        >
+                          {color}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
 
@@ -943,6 +1021,14 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
           text-decoration: underline;
         }
 
+        .table-action-btn.duplicate-btn {
+          color: var(--accent-terracotta);
+        }
+
+        .table-action-btn.duplicate-btn:hover {
+          text-decoration: underline;
+        }
+
         .table-action-btn.delete-btn {
           color: var(--error);
         }
@@ -1107,6 +1193,36 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
 
         .booking-notes-row p {
           color: var(--text-secondary);
+        }
+
+        /* Preset Badges */
+        .preset-badges {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+          margin-top: 8px;
+        }
+
+        .preset-badge {
+          background-color: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          color: var(--text-secondary);
+          font-family: var(--font-sans);
+          font-size: 11px;
+          padding: 4px 8px;
+          cursor: pointer;
+          transition: var(--transition-fast);
+        }
+
+        .preset-badge:hover {
+          background-color: var(--bg-tertiary);
+          color: var(--text-primary);
+        }
+
+        .preset-badge.active {
+          background-color: var(--accent-olive);
+          border-color: var(--accent-olive);
+          color: var(--white);
         }
 
         /* CRUD Modal sizes */

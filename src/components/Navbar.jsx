@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { OWNER_CONFIG } from "../config/ownerConfig";
 
 export default function Navbar({ currentView, setView, cartCount, openCart }) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -21,8 +22,8 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
       <div className="container nav-container">
         <div className="nav-brand" onClick={() => { setView("landing"); setIsMobileOpen(false); }}>
           <span className="brand-sub">Sartoria Italiana</span>
-          <span className="brand-main">Morreale</span>
-          <span className="brand-location">Licata</span>
+          <span className="brand-main">{OWNER_CONFIG.boutiqueName.split(" ")[0]}</span>
+          <span className="brand-location">{OWNER_CONFIG.address.city}</span>
         </div>
 
         <nav className="nav-menu">
