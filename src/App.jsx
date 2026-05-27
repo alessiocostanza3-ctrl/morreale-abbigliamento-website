@@ -18,7 +18,11 @@ export default function App() {
     const saved = localStorage.getItem("morreale_products");
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        return parsed.map(savedProd => {
+          const match = initialProducts.find(ip => ip.id === savedProd.id);
+          return match ? { ...savedProd, imageUrl: match.imageUrl } : savedProd;
+        });
       } catch (e) {
         console.error(e);
       }
