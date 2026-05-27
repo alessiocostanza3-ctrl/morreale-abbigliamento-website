@@ -22,7 +22,8 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
     fabric: "",
     sizes: "",
     colors: "",
-    imageUrl: ""
+    imageUrl: "",
+    colorImages: {}
   });
 
   const handleLogin = (e) => {
@@ -40,7 +41,6 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
     setPassword("");
   };
 
-  // CRUD handlers
   const openEditModal = (product) => {
     setCurrentProduct(product);
     setProductForm({
@@ -51,7 +51,8 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
       fabric: product.fabric,
       sizes: product.sizes.join(", "),
       colors: product.colors.join(", "),
-      imageUrl: product.imageUrl
+      imageUrl: product.imageUrl,
+      colorImages: product.colorImages || {}
     });
     setIsEditing(true);
   };
@@ -65,7 +66,11 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
       fabric: "",
       sizes: "46, 48, 50, 52, 54",
       colors: "Blu Notte, Grigio Antracite",
-      imageUrl: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800&auto=format&fit=crop"
+      imageUrl: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800&auto=format&fit=crop",
+      colorImages: {
+        "Blu Notte": "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?q=80&w=800&auto=format&fit=crop",
+        "Grigio Antracite": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800&auto=format&fit=crop"
+      }
     });
     setIsAdding(true);
   };
@@ -80,7 +85,8 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
       fabric: product.fabric,
       sizes: product.sizes.join(", "),
       colors: product.colors.join(", "),
-      imageUrl: product.imageUrl
+      imageUrl: product.imageUrl,
+      colorImages: product.colorImages || {}
     });
     setIsAdding(true);
   };
@@ -92,6 +98,14 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
       return;
     }
 
+    const activeColors = productForm.colors.split(",").map(c => c.trim()).filter(Boolean);
+    const cleanedColorImages = {};
+    activeColors.forEach(color => {
+      if (productForm.colorImages && productForm.colorImages[color]) {
+        cleanedColorImages[color] = productForm.colorImages[color];
+      }
+    });
+
     const formattedProduct = {
       id: isEditing ? currentProduct.id : "prod-" + Date.now(),
       name: productForm.name,
@@ -100,8 +114,9 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
       description: productForm.description,
       fabric: productForm.fabric,
       sizes: productForm.sizes.split(",").map(s => s.trim()).filter(Boolean),
-      colors: productForm.colors.split(",").map(c => c.trim()).filter(Boolean),
-      imageUrl: productForm.imageUrl
+      colors: activeColors,
+      imageUrl: productForm.imageUrl,
+      colorImages: cleanedColorImages
     };
 
     let updatedProducts;
@@ -713,7 +728,7 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
               </div>
 
               <div className="form-group">
-                <label className="form-label" htmlFor="prod-image">URL Immagine</label>
+                <label className="form-label" htmlFor="prod-image">URL Immagine Principale (Predefinita) *</label>
                 <input
                   type="text"
                   id="prod-image"
@@ -721,8 +736,48 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
                   value={productForm.imageUrl}
                   onChange={e => setProductForm({ ...productForm, imageUrl: e.target.value })}
                   placeholder="https://images.unsplash.com/..."
+                  required
                 />
               </div>
+
+              {/* Associazione Foto Colori */}
+              {productForm.colors.split(",").map(c => c.trim()).filter(Boolean).length > 0 && (
+                <div className="color-images-management" style={{
+                  marginTop: "20px", 
+                  marginBottom: "20px",
+                  border: "1px dashed var(--border-color)", 
+                  padding: "16px",
+                  backgroundColor: "var(--bg-secondary)"
+                }}>
+                  <label className="form-label" style={{ fontWeight: "600", color: "var(--accent-terracotta)", display: "block", marginBottom: "4px" }}>
+                    Associazione Foto per Colori (Varianti)
+                  </label>
+                  <p style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "12px", lineHeight: "1.4" }}>
+                    Per far sì che l'immagine cambi istantaneamente quando l'utente seleziona un colore specifico nella boutique, inserisci qui sotto il link dell'immagine per ciascun colore configurato:
+                  </p>
+                  <div className="grid-2" style={{ gap: "12px" }}>
+                    {productForm.colors.split(",").map(c => c.trim()).filter(Boolean).map(color => (
+                      <div className="form-group" key={color} style={{ marginBottom: "0" }}>
+                        <label className="form-label" style={{ fontSize: "12px", marginBottom: "4px" }}>
+                          Foto per: <strong>{color}</strong>
+                        </label>
+                        <input 
+                          type="text"
+                          className="form-input"
+                          style={{ fontSize: "12px", padding: "8px 12px" }}
+                          value={productForm.colorImages && productForm.colorImages[color] ? productForm.colorImages[color] : ""}
+                          onChange={(e) => {
+                            const updatedColorImages = { ...(productForm.colorImages || {}) };
+                            updatedColorImages[color] = e.target.value;
+                            setProductForm({ ...productForm, colorImages: updatedColorImages });
+                          }}
+                          placeholder="Link immagine..."
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="form-group">
                 <label className="form-label" htmlFor="prod-desc">Descrizione *</label>
