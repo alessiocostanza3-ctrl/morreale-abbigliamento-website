@@ -210,6 +210,20 @@ export default function Philosophy() {
             width: 55%;
             height: 55%;
           }
+
+          .image-overlay-info {
+            padding: 8px 12px;
+            bottom: 10px;
+            left: 10px;
+          }
+
+          .image-overlay-info strong {
+            font-size: 13px;
+          }
+
+          .image-overlay-info span {
+            font-size: 8px;
+          }
         }
       `}</style>
     </section>

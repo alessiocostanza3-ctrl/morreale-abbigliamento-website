@@ -170,6 +170,9 @@ a {
   border: 1px solid transparent;
   cursor: pointer;
   transition: var(--transition-smooth);
+  white-space: normal;
+  text-align: center;
+  word-break: break-word;
 }
 
 .btn-primary {
@@ -430,5 +433,14 @@ a {
 @media (max-width: 480px) {
   .slide-panel {
     padding: 20px;
+  }
+  .btn {
+    padding: 10px 16px;
+    font-size: 13px;
+    width: 100%;
+  }
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
   }
 }
