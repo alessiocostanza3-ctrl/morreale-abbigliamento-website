@@ -4,6 +4,7 @@ import { OWNER_CONFIG } from "../config/ownerConfig";
 export default function Navbar({ currentView, setView, cartCount, openCart }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home"); // 'home' | 'philosophy' | 'appointment' | ''
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,10 +18,50 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (currentView !== "landing") {
+      setActiveSection("");
+      return;
+    }
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "-30% 0px -50% 0px",
+      threshold: 0
+    };
+
+    const handleIntersect = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+    const philosophyEl = document.getElementById("philosophy");
+    const appointmentEl = document.getElementById("appointment");
+
+    if (philosophyEl) observer.observe(philosophyEl);
+    if (appointmentEl) observer.observe(appointmentEl);
+
+    const handleScrollSpy = () => {
+      if (window.scrollY < 200) {
+        setActiveSection("home");
+      }
+    };
+    window.addEventListener("scroll", handleScrollSpy);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", handleScrollSpy);
+    };
+  }, [currentView]);
+
   return (
     <header className={`nav-header ${isScrolled ? "scrolled" : ""}`}>
       <div className="container nav-container">
-        <div className="nav-brand" onClick={() => { setView("landing"); setIsMobileOpen(false); }}>
+        <div className="nav-brand" onClick={() => { setView("landing"); setActiveSection("home"); setIsMobileOpen(false); }}>
           <span className="brand-sub">Sartoria Italiana</span>
           <span className="brand-main">{OWNER_CONFIG.boutiqueName.split(" ")[0]}</span>
           <span className="brand-location">{OWNER_CONFIG.address.city}</span>
@@ -28,27 +69,29 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
 
         <nav className="nav-menu">
           <button 
-            className={`nav-link ${currentView === "landing" ? "active" : ""}`}
-            onClick={() => setView("landing")}
+            className={`nav-link ${currentView === "landing" && activeSection === "home" ? "active" : ""}`}
+            onClick={() => { setView("landing"); setActiveSection("home"); }}
           >
             Home
           </button>
           <a 
             href="#philosophy" 
-            className="nav-link" 
+            className={`nav-link ${currentView === "landing" && activeSection === "philosophy" ? "active" : ""}`}
             onClick={(e) => {
               e.preventDefault();
               setView("landing", "philosophy");
+              setActiveSection("philosophy");
             }}
           >
             Filosofia
           </a>
           <a 
             href="#appointment" 
-            className="nav-link" 
+            className={`nav-link ${currentView === "landing" && activeSection === "appointment" ? "active" : ""}`}
             onClick={(e) => {
               e.preventDefault();
               setView("landing", "appointment");
+              setActiveSection("appointment");
             }}
           >
             Prenota Visita
@@ -104,17 +147,18 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
       <div className={`mobile-nav-drawer ${isMobileOpen ? "open" : ""}`}>
         <div className="mobile-nav-content">
           <button 
-            className="mobile-nav-link" 
-            onClick={() => { setView("landing"); setIsMobileOpen(false); }}
+            className={`mobile-nav-link ${currentView === "landing" && activeSection === "home" ? "active" : ""}`} 
+            onClick={() => { setView("landing"); setActiveSection("home"); setIsMobileOpen(false); }}
           >
             Home
           </button>
           <a 
             href="#philosophy" 
-            className="mobile-nav-link" 
+            className={`mobile-nav-link ${currentView === "landing" && activeSection === "philosophy" ? "active" : ""}`} 
             onClick={(e) => {
               e.preventDefault();
               setView("landing", "philosophy");
+              setActiveSection("philosophy");
               setIsMobileOpen(false);
             }}
           >
@@ -122,23 +166,24 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
           </a>
           <a 
             href="#appointment" 
-            className="mobile-nav-link" 
+            className={`mobile-nav-link ${currentView === "landing" && activeSection === "appointment" ? "active" : ""}`} 
             onClick={(e) => {
               e.preventDefault();
               setView("landing", "appointment");
+              setActiveSection("appointment");
               setIsMobileOpen(false);
             }}
           >
             Prenota un Appuntamento
           </a>
           <button 
-            className="mobile-nav-link" 
+            className={`mobile-nav-link ${currentView === "shop" ? "active" : ""}`} 
             onClick={() => { setView("shop"); setIsMobileOpen(false); }}
           >
             Boutique Shop
           </button>
           <button 
-            className="mobile-nav-link mobile-nav-admin" 
+            className={`mobile-nav-link mobile-nav-admin ${currentView === "admin" ? "active" : ""}`} 
             onClick={() => { setView("admin"); setIsMobileOpen(false); }}
           >
             Area Riservata (Admin)
