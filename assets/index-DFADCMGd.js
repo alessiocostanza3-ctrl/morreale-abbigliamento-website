@@ -1165,7 +1165,7 @@ Error generating stack: `+e.message+`
             padding: 30px 20px;
           }
         }
-      `})]})}function te({products:e,onAddToCart:t,onRequestFitting:n,initialCategory:r,onClearCategory:i}){let[a,o]=(0,_.useState)(`all`),[s,c]=(0,_.useState)(``),[l,u]=(0,_.useState)(`default`),[d,f]=(0,_.useState)(null);_.useEffect(()=>{r&&r!==`all`&&(o(r),i&&i())},[r,i]);let[p,m]=(0,_.useState)(``),[h,g]=(0,_.useState)(``),v=[{id:`all`,label:`Tutte le Collezioni`},{id:`cerimonia`,label:`Cerimonia`},{id:`casual`,label:`Casual Raffinato`},{id:`intimo`,label:`Intimo Elegante`},{id:`accessori`,label:`Accessori`}],y=(0,_.useMemo)(()=>{let t=[...e];if(a!==`all`&&(t=t.filter(e=>e.category===a)),s.trim()){let e=s.toLowerCase();t=t.filter(t=>t.name.toLowerCase().includes(e)||t.description.toLowerCase().includes(e)||t.fabric.toLowerCase().includes(e))}return l===`price-asc`?t.sort((e,t)=>e.price-t.price):l===`price-desc`&&t.sort((e,t)=>t.price-e.price),t},[e,a,s,l]),b=e=>{f(e),m(e.sizes?e.sizes[0]:``),g(e.colors?e.colors[0]:``)},S=()=>{f(null)};return(0,x.jsxs)(`section`,{className:`section shop-section dynamic-theme-${a}`,children:[(0,x.jsxs)(`div`,{className:`container`,children:[(0,x.jsxs)(`div`,{className:`shop-header`,children:[(0,x.jsx)(`span`,{className:`shop-tag`,children:`Collezioni Morreale`}),(0,x.jsx)(`h2`,{className:`shop-title`,children:`L'Eleganza da Indossare`}),(0,x.jsx)(`p`,{className:`shop-subtitle`,children:`Capi sartoriali, tessuti di pregio e abiti da cerimonia. Esplora le nostre collezioni e ordina in tutta sicurezza.`})]}),(0,x.jsxs)(`div`,{className:`filters-panel`,children:[(0,x.jsx)(`div`,{className:`category-tabs`,children:v.map(e=>(0,x.jsx)(`button`,{className:`category-tab ${a===e.id?`active`:``}`,onClick:()=>o(e.id),children:e.label},e.id))}),(0,x.jsxs)(`div`,{className:`search-sort-bar`,children:[(0,x.jsxs)(`div`,{className:`search-input-wrapper`,children:[(0,x.jsxs)(`svg`,{className:`search-icon`,width:`18`,height:`18`,viewBox:`0 0 24 24`,fill:`none`,stroke:`currentColor`,strokeWidth:`2`,children:[(0,x.jsx)(`circle`,{cx:`11`,cy:`11`,r:`8`}),(0,x.jsx)(`line`,{x1:`21`,y1:`21`,x2:`16.65`,y2:`16.65`})]}),(0,x.jsx)(`input`,{type:`text`,className:`shop-search-input`,placeholder:`Cerca per tessuto o abito...`,value:s,onChange:e=>c(e.target.value)})]}),(0,x.jsxs)(`div`,{className:`sort-wrapper`,children:[(0,x.jsx)(`label`,{htmlFor:`sort`,className:`sort-label`,children:`Ordina:`}),(0,x.jsxs)(`select`,{id:`sort`,className:`shop-sort-select`,value:l,onChange:e=>u(e.target.value),children:[(0,x.jsx)(`option`,{value:`default`,children:`In Evidenza`}),(0,x.jsx)(`option`,{value:`price-asc`,children:`Prezzo: Minore a Maggiore`}),(0,x.jsx)(`option`,{value:`price-desc`,children:`Prezzo: Maggiore a Minore`})]})]})]})]}),y.length===0?(0,x.jsxs)(`div`,{className:`shop-empty`,children:[(0,x.jsx)(`p`,{children:`Nessun capo corrisponde ai criteri di ricerca selezionati.`}),(0,x.jsx)(`button`,{className:`btn btn-outline`,onClick:()=>{o(`all`),c(``)},children:`Reimposta Filtri`})]}):(0,x.jsx)(`div`,{className:`grid-4 products-grid`,children:y.flatMap((e,t)=>{let n=[];return t===2&&n.push((0,x.jsxs)(`div`,{className:`product-card editorial-card animate-fade-in`,children:[(0,x.jsx)(`div`,{className:`editorial-overlay`}),(0,x.jsxs)(`div`,{className:`editorial-content`,children:[(0,x.jsx)(`span`,{className:`editorial-tag`,children:`Stile Siciliano`}),(0,x.jsx)(`h3`,{className:`editorial-title`,children:`L'Armonia del Taglio`}),(0,x.jsx)(`p`,{className:`editorial-desc`,children:`“L'abito perfetto deve assecondare le proporzioni del corpo, senza costringerlo mai.”`}),(0,x.jsx)(`cite`,{className:`editorial-author`,children:`— Fabrizio Morreale`})]})]},`editorial-1`)),t===6&&n.push((0,x.jsxs)(`div`,{className:`product-card editorial-card editorial-alt animate-fade-in`,children:[(0,x.jsx)(`div`,{className:`editorial-overlay`}),(0,x.jsxs)(`div`,{className:`editorial-content`,children:[(0,x.jsx)(`span`,{className:`editorial-tag`,children:`Materie Nobili`}),(0,x.jsx)(`h3`,{className:`editorial-title`,children:`Puro Cashmere & Lino`}),(0,x.jsx)(`p`,{className:`editorial-desc`,children:`“La scelta del filato è il primo atto creativo. Selezioniamo solo fibre vegetali e lane pregiate.”`})]})]},`editorial-2`)),n.push((0,x.jsxs)(`div`,{className:`product-card ${t===0||t===7?`featured-card`:``}`,onClick:()=>b(e),children:[(0,x.jsxs)(`div`,{className:`product-image-wrapper`,children:[(0,x.jsx)(`img`,{src:e.imageUrl,alt:e.name,className:`product-card-img`,loading:`lazy`}),(0,x.jsx)(`div`,{className:`card-hover-overlay`,children:(0,x.jsx)(`span`,{className:`overlay-btn-text`,children:`Visualizza Dettagli`})}),(0,x.jsx)(`span`,{className:`product-card-category`,children:e.category})]}),(0,x.jsxs)(`div`,{className:`product-card-info`,children:[(0,x.jsxs)(`span`,{className:`product-card-fabric`,children:[e.fabric.split(` `)[0],` `,e.fabric.split(` `)[1]||``]}),(0,x.jsx)(`h3`,{className:`product-card-title`,children:e.name}),(0,x.jsxs)(`span`,{className:`product-card-price`,children:[`€`,e.price]})]})]},e.id)),n})})]}),d&&(0,x.jsx)(`div`,{className:`modal-overlay`,onClick:S,children:(0,x.jsxs)(`div`,{className:`modal-content product-detail-modal`,onClick:e=>e.stopPropagation(),children:[(0,x.jsx)(`button`,{className:`modal-close`,onClick:S,"aria-label":`Chiudi`,children:`×`}),(0,x.jsxs)(`div`,{className:`grid-2 modal-grid`,children:[(0,x.jsx)(`div`,{className:`modal-image-col`,children:(0,x.jsx)(`img`,{src:d.colorImages&&d.colorImages[h]||d.imageUrl,alt:d.name,className:`modal-product-img`})}),(0,x.jsxs)(`div`,{className:`modal-info-col`,children:[(0,x.jsx)(`span`,{className:`modal-category`,children:d.category}),(0,x.jsx)(`h2`,{className:`modal-title`,children:d.name}),(0,x.jsxs)(`span`,{className:`modal-price`,children:[`€`,d.price]}),(0,x.jsx)(`div`,{className:`modal-divider`}),(0,x.jsx)(`p`,{className:`modal-desc`,children:d.description}),(0,x.jsxs)(`div`,{className:`modal-meta-row fabric-meta-row`,style:{display:`flex`,alignItems:`center`,gap:`15px`,margin:`20px 0`},children:[(0,x.jsxs)(`div`,{style:{flex:`1`},children:[(0,x.jsx)(`strong`,{children:`Tessuto / Composizione:`}),(0,x.jsxs)(`div`,{style:{display:`flex`,alignItems:`center`,gap:`8px`,marginTop:`4px`},children:[(0,x.jsx)(`span`,{className:`fabric-quality-badge`,style:{fontSize:`9px`,backgroundColor:`var(--accent-olive-light)`,color:`var(--accent-olive)`,padding:`2px 6px`,border:`1px solid var(--accent-olive)`,textTransform:`uppercase`,fontWeight:`600`,letterSpacing:`0.05em`,whiteSpace:`nowrap`},children:`Fibra Pregiata`}),(0,x.jsx)(`span`,{style:{fontSize:`14px`},children:d.fabric})]})]}),(0,x.jsxs)(`div`,{className:`fabric-preview-circle`,style:{width:`44px`,height:`44px`,borderRadius:`50%`,border:`2px solid var(--border-color)`,overflow:`hidden`,flexShrink:`0`,position:`relative`,boxShadow:`var(--shadow-sm)`,background:`radial-gradient(circle, #dfd5c8 10%, #c4b6a4 90%)`,display:`flex`,alignItems:`center`,justifyContent:`center`},title:`Dettaglio texture fibra naturale`,children:[(0,x.jsx)(`div`,{style:{position:`absolute`,width:`100%`,height:`100%`,opacity:`0.45`,backgroundImage:`repeating-linear-gradient(45deg, #1C1B1A, #1C1B1A 1px, transparent 1px, transparent 4px), repeating-linear-gradient(-45deg, #1C1B1A, #1C1B1A 1px, transparent 1px, transparent 4px)`}}),(0,x.jsx)(`span`,{style:{fontSize:`8px`,fontWeight:`600`,color:`var(--text-primary)`,zIndex:`1`,textTransform:`uppercase`,letterSpacing:`0.05em`},children:`Zoom`})]})]}),d.sizes&&d.sizes.length>0&&(0,x.jsxs)(`div`,{className:`selection-group`,children:[(0,x.jsx)(`span`,{className:`selection-label`,children:`Taglia Disponibile:`}),(0,x.jsx)(`div`,{className:`options-row`,children:d.sizes.map(e=>(0,x.jsx)(`button`,{className:`option-btn ${p===e?`selected`:``}`,onClick:()=>m(e),children:e},e))})]}),d.colors&&d.colors.length>0&&(0,x.jsxs)(`div`,{className:`selection-group`,children:[(0,x.jsx)(`span`,{className:`selection-label`,children:`Colore:`}),(0,x.jsx)(`div`,{className:`options-row`,children:d.colors.map(e=>(0,x.jsx)(`button`,{className:`option-btn ${h===e?`selected`:``}`,onClick:()=>g(e),children:e},e))})]}),(0,x.jsxs)(`div`,{className:`modal-action-row`,style:{display:`flex`,gap:`10px`,width:`100%`,marginTop:`20px`},children:[(0,x.jsx)(`button`,{className:`btn btn-primary modal-buy-btn`,style:{flex:`1`},onClick:()=>{d&&(t(d,p,h),S())},children:`Aggiungi al Carrello`}),(0,x.jsx)(`button`,{className:`btn btn-secondary modal-fitting-btn`,style:{flex:`1`},onClick:()=>{n&&n(d,p,h),S()},children:`Prova in Atelier`})]})]})]})]})}),(0,x.jsx)(`style`,{children:`
+      `})]})}function te({products:e,onAddToCart:t,onRequestFitting:n,initialCategory:r,onClearCategory:i}){let[a,o]=(0,_.useState)(`all`),[s,c]=(0,_.useState)(``),[l,u]=(0,_.useState)(`default`),[d,f]=(0,_.useState)(null);_.useEffect(()=>{r&&r!==`all`&&(o(r),i&&i())},[r,i]);let[p,m]=(0,_.useState)(``),[h,g]=(0,_.useState)(``),v=[{id:`all`,label:`Tutte le Collezioni`},{id:`cerimonia`,label:`Cerimonia`},{id:`casual`,label:`Casual Raffinato`},{id:`intimo`,label:`Intimo Elegante`},{id:`accessori`,label:`Accessori`}],y=(0,_.useMemo)(()=>{let t=[...e];if(a!==`all`&&(t=t.filter(e=>e.category===a)),s.trim()){let e=s.toLowerCase();t=t.filter(t=>t.name.toLowerCase().includes(e)||t.description.toLowerCase().includes(e)||t.fabric.toLowerCase().includes(e))}return l===`price-asc`?t.sort((e,t)=>e.price-t.price):l===`price-desc`&&t.sort((e,t)=>t.price-e.price),t},[e,a,s,l]),b=e=>{f(e),m(e.sizes?e.sizes[0]:``),g(e.colors?e.colors[0]:``)},S=()=>{f(null)};return(0,x.jsxs)(`section`,{className:`section shop-section dynamic-theme-${a}`,children:[(0,x.jsxs)(`div`,{className:`container`,children:[(0,x.jsxs)(`div`,{className:`shop-header`,children:[(0,x.jsx)(`span`,{className:`shop-tag`,children:`Collezioni Morreale`}),(0,x.jsx)(`h2`,{className:`shop-title`,children:`L'Eleganza da Indossare`}),(0,x.jsx)(`p`,{className:`shop-subtitle`,children:`Capi sartoriali, tessuti di pregio e abiti da cerimonia. Esplora le nostre collezioni e ordina in tutta sicurezza.`})]}),(0,x.jsxs)(`div`,{className:`filters-panel`,children:[(0,x.jsx)(`div`,{className:`category-tabs`,children:v.map(e=>(0,x.jsx)(`button`,{className:`category-tab ${a===e.id?`active`:``}`,onClick:()=>o(e.id),children:e.label},e.id))}),(0,x.jsxs)(`div`,{className:`search-sort-bar`,children:[(0,x.jsxs)(`div`,{className:`search-input-wrapper`,children:[(0,x.jsxs)(`svg`,{className:`search-icon`,width:`18`,height:`18`,viewBox:`0 0 24 24`,fill:`none`,stroke:`currentColor`,strokeWidth:`2`,children:[(0,x.jsx)(`circle`,{cx:`11`,cy:`11`,r:`8`}),(0,x.jsx)(`line`,{x1:`21`,y1:`21`,x2:`16.65`,y2:`16.65`})]}),(0,x.jsx)(`input`,{type:`text`,className:`shop-search-input`,placeholder:`Cerca per tessuto o abito...`,value:s,onChange:e=>c(e.target.value)})]}),(0,x.jsxs)(`div`,{className:`sort-wrapper`,children:[(0,x.jsx)(`label`,{htmlFor:`sort`,className:`sort-label`,children:`Ordina:`}),(0,x.jsxs)(`select`,{id:`sort`,className:`shop-sort-select`,value:l,onChange:e=>u(e.target.value),children:[(0,x.jsx)(`option`,{value:`default`,children:`In Evidenza`}),(0,x.jsx)(`option`,{value:`price-asc`,children:`Prezzo: Minore a Maggiore`}),(0,x.jsx)(`option`,{value:`price-desc`,children:`Prezzo: Maggiore a Minore`})]})]})]})]}),y.length===0?(0,x.jsxs)(`div`,{className:`shop-empty`,children:[(0,x.jsx)(`p`,{children:`Nessun capo corrisponde ai criteri di ricerca selezionati.`}),(0,x.jsx)(`button`,{className:`btn btn-outline`,onClick:()=>{o(`all`),c(``)},children:`Reimposta Filtri`})]}):(0,x.jsx)(`div`,{className:`grid-4 products-grid`,children:y.map(e=>(0,x.jsxs)(`div`,{className:`product-card`,onClick:()=>b(e),children:[(0,x.jsxs)(`div`,{className:`product-image-wrapper`,children:[(0,x.jsx)(`img`,{src:e.imageUrl,alt:e.name,className:`product-card-img`,loading:`lazy`}),(0,x.jsx)(`div`,{className:`card-hover-overlay`,children:(0,x.jsx)(`span`,{className:`overlay-btn-text`,children:`Visualizza Dettagli`})}),(0,x.jsx)(`span`,{className:`product-card-category`,children:e.category})]}),(0,x.jsxs)(`div`,{className:`product-card-info`,children:[(0,x.jsxs)(`span`,{className:`product-card-fabric`,children:[e.fabric.split(` `)[0],` `,e.fabric.split(` `)[1]||``]}),(0,x.jsx)(`h3`,{className:`product-card-title`,children:e.name}),(0,x.jsxs)(`span`,{className:`product-card-price`,children:[`€`,e.price]})]})]},e.id))})]}),d&&(0,x.jsx)(`div`,{className:`modal-overlay`,onClick:S,children:(0,x.jsxs)(`div`,{className:`modal-content product-detail-modal`,onClick:e=>e.stopPropagation(),children:[(0,x.jsx)(`button`,{className:`modal-close`,onClick:S,"aria-label":`Chiudi`,children:`×`}),(0,x.jsxs)(`div`,{className:`grid-2 modal-grid`,children:[(0,x.jsx)(`div`,{className:`modal-image-col`,children:(0,x.jsx)(`img`,{src:d.colorImages&&d.colorImages[h]||d.imageUrl,alt:d.name,className:`modal-product-img`})}),(0,x.jsxs)(`div`,{className:`modal-info-col`,children:[(0,x.jsx)(`span`,{className:`modal-category`,children:d.category}),(0,x.jsx)(`h2`,{className:`modal-title`,children:d.name}),(0,x.jsxs)(`span`,{className:`modal-price`,children:[`€`,d.price]}),(0,x.jsx)(`div`,{className:`modal-divider`}),(0,x.jsx)(`p`,{className:`modal-desc`,children:d.description}),(0,x.jsxs)(`div`,{className:`modal-meta-row fabric-meta-row`,style:{display:`flex`,alignItems:`center`,gap:`15px`,margin:`20px 0`},children:[(0,x.jsxs)(`div`,{style:{flex:`1`},children:[(0,x.jsx)(`strong`,{children:`Tessuto / Composizione:`}),(0,x.jsxs)(`div`,{style:{display:`flex`,alignItems:`center`,gap:`8px`,marginTop:`4px`},children:[(0,x.jsx)(`span`,{className:`fabric-quality-badge`,style:{fontSize:`9px`,backgroundColor:`var(--accent-olive-light)`,color:`var(--accent-olive)`,padding:`2px 6px`,border:`1px solid var(--accent-olive)`,textTransform:`uppercase`,fontWeight:`600`,letterSpacing:`0.05em`,whiteSpace:`nowrap`},children:`Fibra Pregiata`}),(0,x.jsx)(`span`,{style:{fontSize:`14px`},children:d.fabric})]})]}),(0,x.jsxs)(`div`,{className:`fabric-preview-circle`,style:{width:`44px`,height:`44px`,borderRadius:`50%`,border:`2px solid var(--border-color)`,overflow:`hidden`,flexShrink:`0`,position:`relative`,boxShadow:`var(--shadow-sm)`,background:`radial-gradient(circle, #dfd5c8 10%, #c4b6a4 90%)`,display:`flex`,alignItems:`center`,justifyContent:`center`},title:`Dettaglio texture fibra naturale`,children:[(0,x.jsx)(`div`,{style:{position:`absolute`,width:`100%`,height:`100%`,opacity:`0.45`,backgroundImage:`repeating-linear-gradient(45deg, #1C1B1A, #1C1B1A 1px, transparent 1px, transparent 4px), repeating-linear-gradient(-45deg, #1C1B1A, #1C1B1A 1px, transparent 1px, transparent 4px)`}}),(0,x.jsx)(`span`,{style:{fontSize:`8px`,fontWeight:`600`,color:`var(--text-primary)`,zIndex:`1`,textTransform:`uppercase`,letterSpacing:`0.05em`},children:`Zoom`})]})]}),d.sizes&&d.sizes.length>0&&(0,x.jsxs)(`div`,{className:`selection-group`,children:[(0,x.jsx)(`span`,{className:`selection-label`,children:`Taglia Disponibile:`}),(0,x.jsx)(`div`,{className:`options-row`,children:d.sizes.map(e=>(0,x.jsx)(`button`,{className:`option-btn ${p===e?`selected`:``}`,onClick:()=>m(e),children:e},e))})]}),d.colors&&d.colors.length>0&&(0,x.jsxs)(`div`,{className:`selection-group`,children:[(0,x.jsx)(`span`,{className:`selection-label`,children:`Colore:`}),(0,x.jsx)(`div`,{className:`options-row`,children:d.colors.map(e=>(0,x.jsx)(`button`,{className:`option-btn ${h===e?`selected`:``}`,onClick:()=>g(e),children:e},e))})]}),(0,x.jsxs)(`div`,{className:`modal-action-row`,style:{display:`flex`,gap:`10px`,width:`100%`,marginTop:`20px`},children:[(0,x.jsx)(`button`,{className:`btn btn-primary modal-buy-btn`,style:{flex:`1`},onClick:()=>{d&&(t(d,p,h),S())},children:`Aggiungi al Carrello`}),(0,x.jsx)(`button`,{className:`btn btn-secondary modal-fitting-btn`,style:{flex:`1`},onClick:()=>{n&&n(d,p,h),S()},children:`Prova in Atelier`})]})]})]})]})}),(0,x.jsx)(`style`,{children:`
         .shop-section {
           background-color: var(--bg-primary);
           padding-top: calc(var(--navbar-height) + 40px);
@@ -1411,104 +1411,7 @@ Error generating stack: `+e.message+`
           color: var(--accent-terracotta);
         }
 
-        /* Featured Product Card */
-        @media (min-width: 1025px) {
-          .products-grid .featured-card {
-            grid-column: span 2;
-            display: flex;
-            gap: 20px;
-            align-items: center;
-          }
-
-          .products-grid .featured-card .product-image-wrapper {
-            flex: 1;
-            height: 380px;
-          }
-
-          .products-grid .featured-card .product-card-info {
-            flex: 1;
-            padding: 20px;
-          }
-        }
-
-        /* Editorial Lookbook Cards */
-        .editorial-card {
-          grid-column: span 2;
-          position: relative;
-          background-image: url('https://images.unsplash.com/photo-1598257006458-087169a1f08d?q=80&w=800&auto=format&fit=crop');
-          background-size: cover;
-          background-position: center;
-          height: 100%;
-          min-height: 380px;
-          display: flex;
-          align-items: flex-end;
-          padding: 40px !important;
-          border: 1px solid var(--border-color);
-          cursor: default !important;
-        }
-
-        .editorial-card.editorial-alt {
-          background-image: url('https://images.unsplash.com/photo-1598032895397-b9472444bf93?q=80&w=800&auto=format&fit=crop');
-        }
-
-        .editorial-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(180deg, rgba(28, 27, 26, 0.2) 0%, rgba(28, 27, 26, 0.85) 100%);
-          z-index: 1;
-        }
-
-        .editorial-content {
-          position: relative;
-          z-index: 2;
-          text-align: left;
-          color: var(--white);
-        }
-
-        .editorial-tag {
-          font-size: 10px;
-          text-transform: uppercase;
-          letter-spacing: 0.2em;
-          color: var(--accent-terracotta);
-          font-weight: 600;
-          display: block;
-          margin-bottom: 8px;
-        }
-
-        .editorial-title {
-          font-family: var(--font-serif);
-          font-size: 26px;
-          color: var(--white);
-          margin-bottom: 12px;
-          font-weight: 400;
-        }
-
-        .editorial-desc {
-          font-size: 14px;
-          line-height: 1.6;
-          color: #E2D7CC;
-          font-style: italic;
-          margin-bottom: 8px;
-        }
-
-        .editorial-author {
-          font-size: 11px;
-          color: var(--text-muted);
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          font-style: normal;
-        }
-
-        @media (max-width: 768px) {
-          .editorial-card {
-            grid-column: span 1 !important;
-            min-height: 300px;
-            padding: 24px !important;
-          }
-        }
+        
 
         .shop-empty {
           text-align: center;
