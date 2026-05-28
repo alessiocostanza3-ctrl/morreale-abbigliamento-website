@@ -1432,7 +1432,7 @@ Error generating stack: `+e.message+`
         }
 
         .modal-image-col {
-          height: 600px;
+          height: min(600px, 65vh);
           background-color: var(--bg-secondary);
         }
 
