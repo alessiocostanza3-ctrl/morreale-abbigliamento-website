@@ -140,72 +140,31 @@ export default function Shop({ products, onAddToCart, onRequestFitting, initialC
           </div>
         ) : (
           <div className="grid-4 products-grid">
-            {filteredProducts.flatMap((product, idx) => {
-              const elements = [];
-
-              // Insert Lookbook Card after index 2
-              if (idx === 2) {
-                elements.push(
-                  <div 
-                    key="editorial-1" 
-                    className="product-card editorial-card animate-fade-in"
-                  >
-                    <div className="editorial-overlay"></div>
-                    <div className="editorial-content">
-                      <span className="editorial-tag">Stile Siciliano</span>
-                      <h3 className="editorial-title">L'Armonia del Taglio</h3>
-                      <p className="editorial-desc">“L'abito perfetto deve assecondare le proporzioni del corpo, senza costringerlo mai.”</p>
-                      <cite className="editorial-author">— Fabrizio Morreale</cite>
-                    </div>
+            {filteredProducts.map((product) => (
+              <div 
+                key={product.id} 
+                className="product-card"
+                onClick={() => handleOpenDetail(product)}
+              >
+                <div className="product-image-wrapper">
+                  <img 
+                    src={product.imageUrl} 
+                    alt={product.name} 
+                    className="product-card-img"
+                    loading="lazy"
+                  />
+                  <div className="card-hover-overlay">
+                    <span className="overlay-btn-text">Visualizza Dettagli</span>
                   </div>
-                );
-              }
-
-              // Insert Lookbook Card after index 6
-              if (idx === 6) {
-                elements.push(
-                  <div 
-                    key="editorial-2" 
-                    className="product-card editorial-card editorial-alt animate-fade-in"
-                  >
-                    <div className="editorial-overlay"></div>
-                    <div className="editorial-content">
-                      <span className="editorial-tag">Materie Nobili</span>
-                      <h3 className="editorial-title">Puro Cashmere &amp; Lino</h3>
-                      <p className="editorial-desc">“La scelta del filato è il primo atto creativo. Selezioniamo solo fibre vegetali e lane pregiate.”</p>
-                    </div>
-                  </div>
-                );
-              }
-
-              elements.push(
-                <div 
-                  key={product.id} 
-                  className={`product-card ${(idx === 0 || idx === 7) ? 'featured-card' : ''}`}
-                  onClick={() => handleOpenDetail(product)}
-                >
-                  <div className="product-image-wrapper">
-                    <img 
-                      src={product.imageUrl} 
-                      alt={product.name} 
-                      className="product-card-img"
-                      loading="lazy"
-                    />
-                    <div className="card-hover-overlay">
-                      <span className="overlay-btn-text">Visualizza Dettagli</span>
-                    </div>
-                    <span className="product-card-category">{product.category}</span>
-                  </div>
-                  <div className="product-card-info">
-                    <span className="product-card-fabric">{product.fabric.split(" ")[0]} {product.fabric.split(" ")[1] || ""}</span>
-                    <h3 className="product-card-title">{product.name}</h3>
-                    <span className="product-card-price">€{product.price}</span>
-                  </div>
+                  <span className="product-card-category">{product.category}</span>
                 </div>
-              );
-
-              return elements;
-            })}
+                <div className="product-card-info">
+                  <span className="product-card-fabric">{product.fabric.split(" ")[0]} {product.fabric.split(" ")[1] || ""}</span>
+                  <h3 className="product-card-title">{product.name}</h3>
+                  <span className="product-card-price">€{product.price}</span>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -587,104 +546,7 @@ export default function Shop({ products, onAddToCart, onRequestFitting, initialC
           color: var(--accent-terracotta);
         }
 
-        /* Featured Product Card */
-        @media (min-width: 1025px) {
-          .products-grid .featured-card {
-            grid-column: span 2;
-            display: flex;
-            gap: 20px;
-            align-items: center;
-          }
-
-          .products-grid .featured-card .product-image-wrapper {
-            flex: 1;
-            height: 380px;
-          }
-
-          .products-grid .featured-card .product-card-info {
-            flex: 1;
-            padding: 20px;
-          }
-        }
-
-        /* Editorial Lookbook Cards */
-        .editorial-card {
-          grid-column: span 2;
-          position: relative;
-          background-image: url('https://images.unsplash.com/photo-1598257006458-087169a1f08d?q=80&w=800&auto=format&fit=crop');
-          background-size: cover;
-          background-position: center;
-          height: 100%;
-          min-height: 380px;
-          display: flex;
-          align-items: flex-end;
-          padding: 40px !important;
-          border: 1px solid var(--border-color);
-          cursor: default !important;
-        }
-
-        .editorial-card.editorial-alt {
-          background-image: url('https://images.unsplash.com/photo-1598032895397-b9472444bf93?q=80&w=800&auto=format&fit=crop');
-        }
-
-        .editorial-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(180deg, rgba(28, 27, 26, 0.2) 0%, rgba(28, 27, 26, 0.85) 100%);
-          z-index: 1;
-        }
-
-        .editorial-content {
-          position: relative;
-          z-index: 2;
-          text-align: left;
-          color: var(--white);
-        }
-
-        .editorial-tag {
-          font-size: 10px;
-          text-transform: uppercase;
-          letter-spacing: 0.2em;
-          color: var(--accent-terracotta);
-          font-weight: 600;
-          display: block;
-          margin-bottom: 8px;
-        }
-
-        .editorial-title {
-          font-family: var(--font-serif);
-          font-size: 26px;
-          color: var(--white);
-          margin-bottom: 12px;
-          font-weight: 400;
-        }
-
-        .editorial-desc {
-          font-size: 14px;
-          line-height: 1.6;
-          color: #E2D7CC;
-          font-style: italic;
-          margin-bottom: 8px;
-        }
-
-        .editorial-author {
-          font-size: 11px;
-          color: var(--text-muted);
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          font-style: normal;
-        }
-
-        @media (max-width: 768px) {
-          .editorial-card {
-            grid-column: span 1 !important;
-            min-height: 300px;
-            padding: 24px !important;
-          }
-        }
+        
 
         .shop-empty {
           text-align: center;
