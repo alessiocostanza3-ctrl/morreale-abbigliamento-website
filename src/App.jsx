@@ -14,6 +14,23 @@ export default function App() {
   // Global States
   const [view, setView] = useState("landing"); // 'landing' | 'shop' | 'admin'
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [prefilledBooking, setPrefilledBooking] = useState(null);
+
+  const handleRequestFitting = (product, size, color) => {
+    setPrefilledBooking({
+      service: "Prova Capo in Boutique",
+      notes: `Richiesta prova per il capo: ${product.name} (Taglia: ${size}, Colore: ${color})`
+    });
+    setView("landing");
+    
+    // Scroll to the appointment section after rendering
+    setTimeout(() => {
+      const formEl = document.getElementById("appointment");
+      if (formEl) {
+        formEl.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  };
   
   const [products, setProducts] = useState(() => {
     try {
@@ -192,13 +209,21 @@ export default function App() {
           <div className="animate-fade-in">
             <Hero setView={handleNavigate} />
             <Philosophy />
-            <AppointmentForm onAddBooking={handleAddBooking} />
+            <AppointmentForm 
+              onAddBooking={handleAddBooking} 
+              prefilledData={prefilledBooking}
+              onClearPrefilled={() => setPrefilledBooking(null)}
+            />
           </div>
         )}
 
         {view === "shop" && (
           <div className="animate-fade-in">
-            <Shop products={products} onAddToCart={handleAddToCart} />
+            <Shop 
+              products={products} 
+              onAddToCart={handleAddToCart} 
+              onRequestFitting={handleRequestFitting}
+            />
           </div>
         )}
 

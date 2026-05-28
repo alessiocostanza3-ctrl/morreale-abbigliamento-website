@@ -232,22 +232,20 @@ export default function Navbar({ currentView, setView, cartCount, openCart }) {
         }
 
         .nav-link::after {
-          content: '';
+          content: '•';
           position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          height: 1px;
-          background-color: var(--accent-terracotta);
-          transform: scaleX(0);
-          transform-origin: right;
-          transition: transform 0.3s ease;
+          bottom: -4px;
+          left: 50%;
+          transform: translateX(-50%) scale(0);
+          color: var(--accent-terracotta);
+          font-size: 16px;
+          line-height: 1;
+          transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .nav-link:hover::after,
         .nav-link.active::after {
-          transform: scaleX(1);
-          transform-origin: left;
+          transform: translateX(-50%) scale(1);
         }
 
         .nav-link:hover,

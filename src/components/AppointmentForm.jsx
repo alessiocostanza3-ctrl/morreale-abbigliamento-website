@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { OWNER_CONFIG } from "../config/ownerConfig";
 
-export default function AppointmentForm({ onAddBooking }) {
+export default function AppointmentForm({ onAddBooking, prefilledData, onClearPrefilled }) {
   const [submittedData, setSubmittedData] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -15,6 +15,19 @@ export default function AppointmentForm({ onAddBooking }) {
   
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  useEffect(() => {
+    if (prefilledData) {
+      setFormData((prev) => ({
+        ...prev,
+        service: prefilledData.service || prev.service,
+        notes: prefilledData.notes || prev.notes
+      }));
+      if (onClearPrefilled) {
+        onClearPrefilled();
+      }
+    }
+  }, [prefilledData, onClearPrefilled]);
+
   const timeSlots = [
     "09:00 - 10:30",
     "10:30 - 12:00",
@@ -26,7 +39,8 @@ export default function AppointmentForm({ onAddBooking }) {
     "Consulenza Abito da Sposo / Cerimonia",
     "Prova Sartoriale Abito Su Misura",
     "Personal Styling & Casual Rinnovato",
-    "Consulenza Accessori & Dettagli"
+    "Consulenza Accessori & Dettagli",
+    "Prova Capo in Boutique"
   ];
 
   const handleChange = (e) => {

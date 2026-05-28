@@ -53,6 +53,57 @@ export default function Philosophy() {
           </div>
 
         </div>
+
+        <div className="philosophy-monument-quote" style={{
+          marginTop: "80px",
+          paddingTop: "60px",
+          borderTop: "1px solid var(--border-color)",
+          textAlign: "center",
+          maxWidth: "850px",
+          margin: "80px auto 0 auto"
+        }}>
+          <span style={{
+            fontSize: "10px",
+            textTransform: "uppercase",
+            letterSpacing: "0.2em",
+            color: "var(--accent-terracotta)",
+            fontWeight: "600"
+          }}>
+            La Cura del Dettaglio
+          </span>
+          <blockquote style={{
+            fontFamily: "var(--font-serif)",
+            fontSize: "clamp(24px, 4vw, 36px)",
+            lineHeight: "1.3",
+            color: "var(--text-primary)",
+            margin: "20px 0",
+            fontStyle: "italic"
+          }}>
+            “La moda passa, lo stile e la precisione del dettaglio siciliano restano nel tempo.”
+          </blockquote>
+          <cite style={{
+            fontSize: "12px",
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            color: "var(--text-muted)",
+            fontStyle: "normal",
+            fontWeight: "500"
+          }}>
+            — Fabrizio Morreale, Fondatore
+          </cite>
+          
+          <p className="territory-story" style={{
+            marginTop: "40px",
+            fontSize: "15px",
+            lineHeight: "1.8",
+            color: "var(--text-secondary)",
+            textAlign: "justify",
+            textJustify: "inter-word"
+          }}>
+            Morreale Abbigliamento nasce nel cuore di Licata, un territorio plasmato dal calore del sole e dalla luce riflessa del Mediterraneo. Questa atmosfera e i colori della nostra costa ispirano ogni giorno la selezione delle nostre collezioni. Crediamo che vestire sia un rito antico che unisce il rigore del taglio alla morbidezza e alla freschezza delle materie naturali, creando un ponte invisibile tra la solennità delle occasioni speciali e la spontaneità dell'eleganza quotidiana.
+          </p>
+        </div>
+
       </div>
 
       <style>{`

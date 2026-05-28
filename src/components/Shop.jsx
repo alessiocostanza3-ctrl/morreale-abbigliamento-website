@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 
-export default function Shop({ products, onAddToCart }) {
+export default function Shop({ products, onAddToCart, onRequestFitting }) {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("default");
@@ -184,9 +184,51 @@ export default function Shop({ products, onAddToCart }) {
                 
                 <p className="modal-desc">{selectedProduct.description}</p>
                 
-                <div className="modal-meta-row">
-                  <strong>Tessuto / Composizione:</strong>
-                  <span>{selectedProduct.fabric}</span>
+                <div className="modal-meta-row fabric-meta-row" style={{ display: "flex", alignItems: "center", gap: "15px", margin: "20px 0" }}>
+                  <div style={{ flex: "1" }}>
+                    <strong>Tessuto / Composizione:</strong>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "4px" }}>
+                      <span className="fabric-quality-badge" style={{
+                        fontSize: "9px",
+                        backgroundColor: "var(--accent-olive-light)",
+                        color: "var(--accent-olive)",
+                        padding: "2px 6px",
+                        border: "1px solid var(--accent-olive)",
+                        textTransform: "uppercase",
+                        fontWeight: "600",
+                        letterSpacing: "0.05em",
+                        whiteSpace: "nowrap"
+                      }}>
+                        Fibra Pregiata
+                      </span>
+                      <span style={{ fontSize: "14px" }}>{selectedProduct.fabric}</span>
+                    </div>
+                  </div>
+                  
+                  {/* Visual Weave Preview Zoom (Zegna/Loro Piana Concept) */}
+                  <div className="fabric-preview-circle" style={{
+                    width: "44px",
+                    height: "44px",
+                    borderRadius: "50%",
+                    border: "2px solid var(--border-color)",
+                    overflow: "hidden",
+                    flexShrink: "0",
+                    position: "relative",
+                    boxShadow: "var(--shadow-sm)",
+                    background: "radial-gradient(circle, #dfd5c8 10%, #c4b6a4 90%)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }} title="Dettaglio texture fibra naturale">
+                    <div style={{
+                      position: "absolute",
+                      width: "100%",
+                      height: "100%",
+                      opacity: "0.45",
+                      backgroundImage: "repeating-linear-gradient(45deg, #1C1B1A, #1C1B1A 1px, transparent 1px, transparent 4px), repeating-linear-gradient(-45deg, #1C1B1A, #1C1B1A 1px, transparent 1px, transparent 4px)"
+                    }}></div>
+                    <span style={{ fontSize: "8px", fontWeight: "600", color: "var(--text-primary)", zIndex: "1", textTransform: "uppercase", letterSpacing: "0.05em" }}>Zoom</span>
+                  </div>
                 </div>
 
                 {/* Size Selector */}
@@ -225,9 +267,21 @@ export default function Shop({ products, onAddToCart }) {
                   </div>
                 )}
 
-                <div className="modal-action-row">
-                  <button className="btn btn-primary modal-buy-btn" onClick={handleAddToCart}>
+                <div className="modal-action-row" style={{ display: "flex", gap: "10px", width: "100%", marginTop: "20px" }}>
+                  <button className="btn btn-primary modal-buy-btn" style={{ flex: "1" }} onClick={handleAddToCart}>
                     Aggiungi al Carrello
+                  </button>
+                  <button 
+                    className="btn btn-secondary modal-fitting-btn" 
+                    style={{ flex: "1" }} 
+                    onClick={() => {
+                      if (onRequestFitting) {
+                        onRequestFitting(selectedProduct, selectedSize, selectedColor);
+                      }
+                      handleCloseDetail();
+                    }}
+                  >
+                    Prova in Atelier
                   </button>
                 </div>
               </div>
@@ -380,16 +434,17 @@ export default function Shop({ products, onAddToCart }) {
         .product-card {
           text-align: left;
           cursor: pointer;
-          background-color: var(--white);
+          background-color: var(--bg-primary);
           border: 1px solid transparent;
           padding: 10px;
           transition: var(--transition-smooth);
         }
 
         .product-card:hover {
+          background-color: var(--white);
           border-color: var(--border-color);
-          box-shadow: var(--shadow-sm);
-          transform: translateY(-4px);
+          box-shadow: var(--shadow-md);
+          transform: translateY(-6px);
         }
 
         .product-image-wrapper {
