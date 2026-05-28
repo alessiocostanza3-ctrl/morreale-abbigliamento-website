@@ -15,6 +15,7 @@ export default function App() {
   const [view, setView] = useState("landing"); // 'landing' | 'shop' | 'admin'
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [prefilledBooking, setPrefilledBooking] = useState(null);
+  const [selectedShopCategory, setSelectedShopCategory] = useState("all");
 
   const handleRequestFitting = (product, size, color) => {
     setPrefilledBooking({
@@ -24,6 +25,21 @@ export default function App() {
     setView("landing");
     
     // Scroll to the appointment section after rendering
+    setTimeout(() => {
+      const formEl = document.getElementById("appointment");
+      if (formEl) {
+        formEl.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  };
+
+  const handleRequestFabricFitting = (fabric) => {
+    setPrefilledBooking({
+      service: "Consulenza Tessuto / Misura",
+      notes: `Richiesta consulenza e fitting per il tessuto di pregio: ${fabric.name} (Mill: ${fabric.mill}, Peso: ${fabric.weight})`
+    });
+    setView("landing");
+    
     setTimeout(() => {
       const formEl = document.getElementById("appointment");
       if (formEl) {
@@ -178,12 +194,15 @@ export default function App() {
 
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Smooth scroll helper with hash support
-  const handleNavigate = (newView, hash) => {
+  // Smooth scroll helper with hash and category support
+  const handleNavigate = (newView, hashOrCategory) => {
     setView(newView);
-    if (hash) {
+    if (newView === "shop" && hashOrCategory) {
+      setSelectedShopCategory(hashOrCategory);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (hashOrCategory) {
       setTimeout(() => {
-        const element = document.getElementById(hash.replace("#", ""));
+        const element = document.getElementById(hashOrCategory.replace("#", ""));
         if (element) {
           element.scrollIntoView({ behavior: "smooth" });
         }
@@ -208,7 +227,7 @@ export default function App() {
         {view === "landing" && (
           <div className="animate-fade-in">
             <Hero setView={handleNavigate} />
-            <Philosophy />
+            <Philosophy onRequestFabricFitting={handleRequestFabricFitting} />
             <AppointmentForm 
               onAddBooking={handleAddBooking} 
               prefilledData={prefilledBooking}
@@ -223,6 +242,8 @@ export default function App() {
               products={products} 
               onAddToCart={handleAddToCart} 
               onRequestFitting={handleRequestFitting}
+              initialCategory={selectedShopCategory}
+              onClearCategory={() => setSelectedShopCategory("all")}
             />
           </div>
         )}

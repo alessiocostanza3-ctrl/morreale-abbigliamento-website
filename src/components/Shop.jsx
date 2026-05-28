@@ -1,10 +1,19 @@
 import React, { useState, useMemo } from "react";
 
-export default function Shop({ products, onAddToCart, onRequestFitting }) {
+export default function Shop({ products, onAddToCart, onRequestFitting, initialCategory, onClearCategory }) {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("default");
   const [selectedProduct, setSelectedProduct] = useState(null);
+
+  React.useEffect(() => {
+    if (initialCategory && initialCategory !== "all") {
+      setSelectedCategory(initialCategory);
+      if (onClearCategory) {
+        onClearCategory();
+      }
+    }
+  }, [initialCategory, onClearCategory]);
   
   // Details Selection State
   const [selectedSize, setSelectedSize] = useState("");
@@ -65,7 +74,7 @@ export default function Shop({ products, onAddToCart, onRequestFitting }) {
   };
 
   return (
-    <section className="section shop-section">
+    <section className={`section shop-section dynamic-theme-${selectedCategory}`}>
       <div className="container">
         
         <div className="shop-header">
@@ -131,31 +140,72 @@ export default function Shop({ products, onAddToCart, onRequestFitting }) {
           </div>
         ) : (
           <div className="grid-4 products-grid">
-            {filteredProducts.map((product) => (
-              <div 
-                key={product.id} 
-                className="product-card"
-                onClick={() => handleOpenDetail(product)}
-              >
-                <div className="product-image-wrapper">
-                  <img 
-                    src={product.imageUrl} 
-                    alt={product.name} 
-                    className="product-card-img"
-                    loading="lazy"
-                  />
-                  <div className="card-hover-overlay">
-                    <span className="overlay-btn-text">Visualizza Dettagli</span>
+            {filteredProducts.flatMap((product, idx) => {
+              const elements = [];
+
+              // Insert Lookbook Card after index 2
+              if (idx === 2) {
+                elements.push(
+                  <div 
+                    key="editorial-1" 
+                    className="product-card editorial-card animate-fade-in"
+                  >
+                    <div className="editorial-overlay"></div>
+                    <div className="editorial-content">
+                      <span className="editorial-tag">Stile Siciliano</span>
+                      <h3 className="editorial-title">L'Armonia del Taglio</h3>
+                      <p className="editorial-desc">“L'abito perfetto deve assecondare le proporzioni del corpo, senza costringerlo mai.”</p>
+                      <cite className="editorial-author">— Fabrizio Morreale</cite>
+                    </div>
                   </div>
-                  <span className="product-card-category">{product.category}</span>
+                );
+              }
+
+              // Insert Lookbook Card after index 6
+              if (idx === 6) {
+                elements.push(
+                  <div 
+                    key="editorial-2" 
+                    className="product-card editorial-card editorial-alt animate-fade-in"
+                  >
+                    <div className="editorial-overlay"></div>
+                    <div className="editorial-content">
+                      <span className="editorial-tag">Materie Nobili</span>
+                      <h3 className="editorial-title">Puro Cashmere &amp; Lino</h3>
+                      <p className="editorial-desc">“La scelta del filato è il primo atto creativo. Selezioniamo solo fibre vegetali e lane pregiate.”</p>
+                    </div>
+                  </div>
+                );
+              }
+
+              elements.push(
+                <div 
+                  key={product.id} 
+                  className={`product-card ${(idx === 0 || idx === 7) ? 'featured-card' : ''}`}
+                  onClick={() => handleOpenDetail(product)}
+                >
+                  <div className="product-image-wrapper">
+                    <img 
+                      src={product.imageUrl} 
+                      alt={product.name} 
+                      className="product-card-img"
+                      loading="lazy"
+                    />
+                    <div className="card-hover-overlay">
+                      <span className="overlay-btn-text">Visualizza Dettagli</span>
+                    </div>
+                    <span className="product-card-category">{product.category}</span>
+                  </div>
+                  <div className="product-card-info">
+                    <span className="product-card-fabric">{product.fabric.split(" ")[0]} {product.fabric.split(" ")[1] || ""}</span>
+                    <h3 className="product-card-title">{product.name}</h3>
+                    <span className="product-card-price">€{product.price}</span>
+                  </div>
                 </div>
-                <div className="product-card-info">
-                  <span className="product-card-fabric">{product.fabric.split(" ")[0]} {product.fabric.split(" ")[1] || ""}</span>
-                  <h3 className="product-card-title">{product.name}</h3>
-                  <span className="product-card-price">€{product.price}</span>
-                </div>
-              </div>
-            ))}
+              );
+
+              return elements;
+            })}
           </div>
         )}
       </div>
@@ -537,6 +587,105 @@ export default function Shop({ products, onAddToCart, onRequestFitting }) {
           color: var(--accent-terracotta);
         }
 
+        /* Featured Product Card */
+        @media (min-width: 1025px) {
+          .products-grid .featured-card {
+            grid-column: span 2;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+          }
+
+          .products-grid .featured-card .product-image-wrapper {
+            flex: 1;
+            height: 380px;
+          }
+
+          .products-grid .featured-card .product-card-info {
+            flex: 1;
+            padding: 20px;
+          }
+        }
+
+        /* Editorial Lookbook Cards */
+        .editorial-card {
+          grid-column: span 2;
+          position: relative;
+          background-image: url('https://images.unsplash.com/photo-1598257006458-087169a1f08d?q=80&w=800&auto=format&fit=crop');
+          background-size: cover;
+          background-position: center;
+          height: 100%;
+          min-height: 380px;
+          display: flex;
+          align-items: flex-end;
+          padding: 40px !important;
+          border: 1px solid var(--border-color);
+          cursor: default !important;
+        }
+
+        .editorial-card.editorial-alt {
+          background-image: url('https://images.unsplash.com/photo-1598032895397-b9472444bf93?q=80&w=800&auto=format&fit=crop');
+        }
+
+        .editorial-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(180deg, rgba(28, 27, 26, 0.2) 0%, rgba(28, 27, 26, 0.85) 100%);
+          z-index: 1;
+        }
+
+        .editorial-content {
+          position: relative;
+          z-index: 2;
+          text-align: left;
+          color: var(--white);
+        }
+
+        .editorial-tag {
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          color: var(--accent-terracotta);
+          font-weight: 600;
+          display: block;
+          margin-bottom: 8px;
+        }
+
+        .editorial-title {
+          font-family: var(--font-serif);
+          font-size: 26px;
+          color: var(--white);
+          margin-bottom: 12px;
+          font-weight: 400;
+        }
+
+        .editorial-desc {
+          font-size: 14px;
+          line-height: 1.6;
+          color: #E2D7CC;
+          font-style: italic;
+          margin-bottom: 8px;
+        }
+
+        .editorial-author {
+          font-size: 11px;
+          color: var(--text-muted);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          font-style: normal;
+        }
+
+        @media (max-width: 768px) {
+          .editorial-card {
+            grid-column: span 1 !important;
+            min-height: 300px;
+            padding: 24px !important;
+          }
+        }
+
         .shop-empty {
           text-align: center;
           padding: 80px 0;
@@ -797,6 +946,184 @@ export default function Shop({ products, onAddToCart, onRequestFitting }) {
             padding: 6px 12px;
             font-size: 11px;
           }
+        }
+
+        /* Dynamic Luxury Dark Theme for Cerimonia (Zegna / Rubinacci Concept) */
+        .shop-section {
+          position: relative;
+          transition: background-color 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .shop-section::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0.02;
+          pointer-events: none;
+          background-image: repeating-linear-gradient(45deg, #000, #000 1px, transparent 1px, transparent 4px), 
+                            repeating-linear-gradient(-45deg, #000, #000 1px, transparent 1px, transparent 4px);
+          z-index: 0;
+        }
+
+        .shop-section .container {
+          position: relative;
+          z-index: 1;
+        }
+
+        .dynamic-theme-cerimonia {
+          background-color: #121110 !important;
+        }
+
+        .dynamic-theme-cerimonia::before {
+          opacity: 0.035;
+          background-image: repeating-linear-gradient(45deg, #fff, #fff 1px, transparent 1px, transparent 4px), 
+                            repeating-linear-gradient(-45deg, #fff, #fff 1px, transparent 1px, transparent 4px);
+        }
+
+        .dynamic-theme-cerimonia .shop-title {
+          color: #FCFAF7;
+        }
+
+        .dynamic-theme-cerimonia .shop-subtitle {
+          color: #B2A79C;
+        }
+
+        .dynamic-theme-cerimonia .shop-tag {
+          color: #C5A059; /* Satin Brass */
+        }
+
+        .dynamic-theme-cerimonia .filters-panel {
+          border-bottom-color: #282624;
+        }
+
+        .dynamic-theme-cerimonia .category-tab {
+          color: #B2A79C;
+          border-color: #383532;
+        }
+
+        .dynamic-theme-cerimonia .category-tab:hover {
+          border-color: #C5A059;
+          color: #FCFAF7;
+        }
+
+        .dynamic-theme-cerimonia .category-tab.active {
+          background-color: rgba(197, 160, 89, 0.12);
+          border-color: #C5A059;
+          color: #C5A059;
+        }
+
+        .dynamic-theme-cerimonia .shop-search-input {
+          background-color: #1A1918;
+          border-color: #383532;
+          color: #FCFAF7;
+        }
+
+        .dynamic-theme-cerimonia .shop-search-input:focus {
+          border-color: #C5A059;
+        }
+
+        .dynamic-theme-cerimonia .sort-label {
+          color: #B2A79C;
+        }
+
+        .dynamic-theme-cerimonia .shop-sort-select {
+          background-color: #1A1918;
+          border-color: #383532;
+          color: #FCFAF7;
+        }
+
+        .dynamic-theme-cerimonia .product-card {
+          background-color: #121110;
+          border-color: transparent;
+        }
+
+        .dynamic-theme-cerimonia .product-card:hover {
+          background-color: #1A1918;
+          border-color: #282624;
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .dynamic-theme-cerimonia .product-card-title {
+          color: #FCFAF7;
+        }
+
+        .dynamic-theme-cerimonia .product-card-price {
+          color: #C5A059;
+        }
+
+        .dynamic-theme-cerimonia .product-card-fabric {
+          color: #A5B29B; /* softer olive */
+        }
+
+        .dynamic-theme-cerimonia .product-card-category {
+          background-color: #1A1918;
+          color: #FCFAF7;
+          border-color: #282624;
+        }
+
+        /* Modal Ceremony theme styling */
+        .dynamic-theme-cerimonia .modal-content {
+          background-color: #151413;
+          border: 1px solid #383532;
+          box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+        }
+
+        .dynamic-theme-cerimonia .modal-title {
+          color: #FCFAF7;
+        }
+
+        .dynamic-theme-cerimonia .modal-price {
+          color: #C5A059;
+        }
+
+        .dynamic-theme-cerimonia .modal-desc {
+          color: #B2A79C;
+        }
+
+        .dynamic-theme-cerimonia .modal-divider {
+          background-color: #282624;
+        }
+
+        .dynamic-theme-cerimonia .modal-meta-row strong {
+          color: #FCFAF7;
+        }
+
+        .dynamic-theme-cerimonia .modal-meta-row span {
+          color: #B2A79C;
+        }
+
+        .dynamic-theme-cerimonia .selection-label {
+          color: #B2A79C;
+        }
+
+        .dynamic-theme-cerimonia .option-btn {
+          background-color: #1A1918;
+          border-color: #282624;
+          color: #FCFAF7;
+        }
+
+        .dynamic-theme-cerimonia .option-btn:hover {
+          border-color: #C5A059;
+          color: #FCFAF7;
+        }
+
+        .dynamic-theme-cerimonia .option-btn.selected {
+          border-color: #C5A059;
+          background-color: rgba(197, 160, 89, 0.15);
+          color: #C5A059;
+        }
+
+        .dynamic-theme-cerimonia .modal-close {
+          background-color: rgba(26, 25, 24, 0.8);
+          color: #FCFAF7;
+        }
+
+        .dynamic-theme-cerimonia .modal-close:hover {
+          background-color: #FCFAF7;
+          color: #121110;
         }
       `}</style>
     </section>
