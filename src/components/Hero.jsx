@@ -9,8 +9,6 @@ export default function Hero({ setView }) {
       {/* Left Column: Cerimonia */}
       <div 
         className={`hero-split split-left ${activeSide === 'left' ? 'expanded' : activeSide === 'right' ? 'collapsed' : ''}`}
-        onMouseEnter={() => setActiveSide('left')}
-        onMouseLeave={() => setActiveSide(null)}
       >
         <div className="split-bg">
           <video 
@@ -28,7 +26,12 @@ export default function Hero({ setView }) {
           <span className="split-tag">Esclusivo &amp; Formale</span>
           <h2 className="split-title">Collezione Cerimonia</h2>
           <p className="split-desc">Abiti tre pezzi, smoking e accessori sartoriali per occasioni solenni e nozze impeccabili.</p>
-          <button className="btn btn-primary split-btn" onClick={() => setView("shop", "cerimonia")}>
+          <button 
+            className="btn btn-primary split-btn" 
+            onClick={() => setView("shop", "cerimonia")}
+            onMouseEnter={() => setActiveSide('left')}
+            onMouseLeave={() => setActiveSide(null)}
+          >
             Esplora Cerimonia
           </button>
         </div>
@@ -37,8 +40,6 @@ export default function Hero({ setView }) {
       {/* Right Column: Casual Sartoriale */}
       <div 
         className={`hero-split split-right ${activeSide === 'right' ? 'expanded' : activeSide === 'left' ? 'collapsed' : ''}`}
-        onMouseEnter={() => setActiveSide('right')}
-        onMouseLeave={() => setActiveSide(null)}
       >
         <div className="split-bg">
           <video 
@@ -56,7 +57,12 @@ export default function Hero({ setView }) {
           <span className="split-tag">Morbido &amp; Naturale</span>
           <h2 className="split-title">Casual Sartoriale</h2>
           <p className="split-desc">Giacche sfoderate in lino e camicie fiammate pensate per un'eleganza quotidiana senza sforzo.</p>
-          <button className="btn btn-primary split-btn" onClick={() => setView("shop", "casual")}>
+          <button 
+            className="btn btn-primary split-btn" 
+            onClick={() => setView("shop", "casual")}
+            onMouseEnter={() => setActiveSide('right')}
+            onMouseLeave={() => setActiveSide(null)}
+          >
             Scopri il Casual
           </button>
         </div>
@@ -138,7 +144,7 @@ export default function Hero({ setView }) {
           transition: transform 0.8s ease;
         }
 
-        .hero-split:hover .split-video {
+        .hero-split.expanded .split-video {
           transform: scale(1.06);
         }
 
@@ -153,7 +159,7 @@ export default function Hero({ setView }) {
           transition: background 0.4s ease;
         }
 
-        .hero-split:hover .split-overlay {
+        .hero-split.expanded .split-overlay {
           background: linear-gradient(180deg, rgba(28, 27, 26, 0.3) 0%, rgba(28, 27, 26, 0.75) 100%);
         }
 
