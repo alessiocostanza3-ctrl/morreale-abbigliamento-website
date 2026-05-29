@@ -9,6 +9,7 @@ export default function Hero({ setView }) {
       {/* Left Column: Cerimonia */}
       <div 
         className={`hero-split split-left ${activeSide === 'left' ? 'expanded' : activeSide === 'right' ? 'collapsed' : ''}`}
+        onMouseLeave={() => setActiveSide(null)}
       >
         <div className="split-bg">
           <video 
@@ -30,7 +31,6 @@ export default function Hero({ setView }) {
             className="btn btn-primary split-btn" 
             onClick={() => setView("shop", "cerimonia")}
             onMouseEnter={() => setActiveSide('left')}
-            onMouseLeave={() => setActiveSide(null)}
           >
             Esplora Cerimonia
           </button>
@@ -40,6 +40,7 @@ export default function Hero({ setView }) {
       {/* Right Column: Casual Sartoriale */}
       <div 
         className={`hero-split split-right ${activeSide === 'right' ? 'expanded' : activeSide === 'left' ? 'collapsed' : ''}`}
+        onMouseLeave={() => setActiveSide(null)}
       >
         <div className="split-bg">
           <video 
@@ -61,7 +62,6 @@ export default function Hero({ setView }) {
             className="btn btn-primary split-btn" 
             onClick={() => setView("shop", "casual")}
             onMouseEnter={() => setActiveSide('right')}
-            onMouseLeave={() => setActiveSide(null)}
           >
             Scopri il Casual
           </button>
