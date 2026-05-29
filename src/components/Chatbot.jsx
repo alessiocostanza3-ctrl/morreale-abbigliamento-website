@@ -68,7 +68,7 @@ export default function Chatbot() {
           replyText = await callGeminiAPI(geminiKey, text, messages);
         } catch (error) {
           console.error("Errore chiamata Gemini:", error);
-          replyText = `Scusami, ho riscontrato una piccola anomalia nel connettermi a Gemini. Dettaglio: ${error.message}. Ti rispondo localmente: ${getLocalResponse(text)}`;
+          replyText = getLocalResponse(text, true);
         }
       } else {
         // Fallback local keyword responder
@@ -92,22 +92,35 @@ export default function Chatbot() {
     const systemPrompt = `
       Sei ${botName}, ${botTitle} di Morreale Abbigliamento, boutique di abbigliamento maschile di lusso situata a Licata (Sicilia), fondata da Fabrizio Morreale.
       Rispondi in modo estremamente cortese, elegante e caloroso. Usa un tono professionale ma accogliente, tipico di un atelier di lusso italiano.
-      Sei in grado di consigliare capi, spiegare la qualità delle fibre naturali (come la lana Super 130s di Loro Piana, il lino fiammato Solbiati, la seta di Como) e guidare l'utente nella prenotazione di un appuntamento o nell'acquisto.
+      Sei in grado di consigliare capi, spiegare la qualità delle fibre naturali (come la lana Super 130s di Loro Piana, il lino fiammato Solbiati, la seta di Como) e guidare l'utente sia nell'acquisto online sullo Shop del sito sia nella prenotazione di un appuntamento.
 
-      Informazioni utili sulla boutique:
-      - Fondatore: Fabrizio Morreale
-      - Indirizzo: Via Corso Umberto I, Licata (AG)
+      Informazioni utili sulla boutique e sul catalogo dello Shop:
+      - Fondatore: Fabrizio Morreale.
+      - Indirizzo: Via Corso Umberto I, Licata (AG).
       - Email di Fabrizio (test): alessiocostanza3@gmail.com
-      - Telefono: +39 0922 851000
+      - Telefono: +39 0922 851000.
       - Orari: Lunedì - Sabato: 09:00-13:00, 16:30-20:30. Domenica chiuso.
       - Servizi: Abiti da cerimonia uomo, abiti su misura, casual sartoriale, intimo di pregio, accessori. Prova in boutique gratuita con prenotazione.
       - Spedizioni: Gratuite in tutta Italia per ordini sopra i 150€. Consegna in 2-3 giorni lavorativi.
       - Pagamenti: Carta di credito, PayPal, contrassegno (pagamento alla consegna).
+      - Prodotti principali disponibili nello Shop (acquistabili direttamente online sul sito):
+        * Abito Tre Pezzi 'Principe di Galles' (Cerimonia, €890, in lana Super 130s Loro Piana).
+        * Tuxedo Classico 'Midnight Blue' (Cerimonia, €1100, misto lana e seta).
+        * Completo Lino 'Palermo' Estivo (Cerimonia, €750).
+        * Giacca Sfoderata in Lino e Seta (Casual, €450).
+        * Camicia Sartoriale in Lino Fiammato (Casual, €135, nei colori Bianco, Azzurro Polvere e Lino Naturale).
+        * Camicia di Seta Nera 'Notte Siciliana' (Casual, €240, in Nero o Panna).
+        * Maglia a Polo in Filo di Scozia (Casual, €180).
+        * Pantaloni Chino in Cotone Supima (Casual, €165).
+        * Cappotto Doppiopetto in Cashmere (Casual, €1450, in cashmere Loro Piana).
+        * Intimo di pregio (es. Boxer Sartoriale in Seta Jacquard a €65, Vestaglia in Seta a €320, Pigiama in Popeline a €185).
+        * Accessori (Cravatta in Seta Tricot a €95, Scarpe Oxford in pelle a €340, Cintura intrecciata in cuoio a €110, Gemelli in Argento a €190).
 
-      Regole di risposta:
+      Regole di risposta importanti:
       1. Mantieni le risposte brevi ed eleganti (massimo 3-4 frasi), a meno che non sia richiesta una spiegazione tecnica dettagliata.
-      2. Incoraggia il cliente a prenotare un appuntamento in boutique per una prova abito o una consulenza sulle misure ("Prenota una Visita" o "Prova in Atelier").
-      3. Sii coerente con la tua personalità: sei ${botName}, assistente virtuale ${isWinter ? 'femminile fatta di lana calda e accogliente' : 'maschile fatto di una fresca fibra di lino siciliana'}.
+      2. Se il cliente chiede di vedere modelli, comprare vestiti, o che cosa c'è di disponibile, descrivi i capi disponibili nello Shop del sito (ad esempio, le camicie in lino fiammato o in seta nera) e invitalo ad acquistarli direttamente online sul sito scorrendo in basso fino alla sezione Shop, oppure ad aggiungerli al carrello.
+      3. Non spingere il cliente a venire fisicamente in boutique o a prenotare un appuntamento a meno che non stia esplicitamente cercando abiti su misura, abiti da sposo/cerimonia complessi o una prova di persona. Se vuole comprare online, aiutalo a scegliere e digli che può completare l'acquisto sul sito.
+      4. Sii coerente con la tua personalità: sei ${botName}, assistente virtuale ${isWinter ? 'femminile fatta di lana calda e accogliente' : 'maschile fatto di una fresca fibra di lino siciliana'}.
     `;
 
     // Map history to Gemini API format
@@ -148,7 +161,7 @@ export default function Chatbot() {
   };
 
   // Local Fallback Keyword Matching
-  const getLocalResponse = (text) => {
+  const getLocalResponse = (text, isErrorFallback = false) => {
     const q = text.toLowerCase();
     
     if (q.includes("orari") || q.includes("apertura") || q.includes("chiuso") || q.includes("sabato") || q.includes("domenica")) {
@@ -175,13 +188,18 @@ export default function Chatbot() {
     if (q.includes("fabrizio") || q.includes("proprietario") || q.includes("fondatore")) {
       return "Il titolare della boutique è Fabrizio Morreale. Da anni seleziona personalmente i migliori capi sartoriali e tessuti per offrire ai clienti di Licata e di tutta Italia un'eleganza classica senza tempo.";
     }
+    if (q.includes("camicia") || q.includes("camicie") || q.includes("modelli") || q.includes("catalogo") || q.includes("comprare") || q.includes("vestiti") || q.includes("capi") || q.includes("abito") || q.includes("abiti") || q.includes("prodotto") || q.includes("prodotti") || q.includes("shop") || q.includes("acquistare") || q.includes("disponibil")) {
+      return "Nel nostro Shop online (scorrendo in basso nella pagina principale) puoi trovare la nostra collezione esclusiva. Abbiamo splendidi abiti da cerimonia (come l'Abito Tre Pezzi Loro Piana), giacche casual sfoderate e camicie di pregio (la Camicia in Lino Fiammato a 135€ o la Camicia in Seta 'Notte Siciliana' a 240€). Puoi visualizzarli e acquistarli direttamente sul sito!";
+    }
 
-    // Default local fallback prompting user to add key
+    if (isErrorFallback) {
+      return `Scusami, ho riscontrato un piccolo rallentamento temporaneo nella connessione. Posso comunque darti risposte rapide su orari, indirizzo, contatti, spedizioni o prenotazione appuntamenti. Di cosa hai bisogno?`;
+    }
+
+    // Default local fallback
     return `Sono ${botName}, il tuo assistente virtuale di Morreale Abbigliamento. 
     
-    Per farmi rispondere a qualsiasi domanda in linguaggio naturale con l'intelligenza di Google Gemini, puoi configurare una Gemini API Key nel Pannello Admin. 
-    
-    Nel frattempo, posso darti risposte veloci su: Orari, Indirizzo a Licata, Contatti, Prenotazione Appuntamenti, Spedizioni e Tessuti (Loro Piana, Solbiati).`;
+Posso darti risposte veloci su: Orari, Indirizzo a Licata, Contatti, Prenotazione Appuntamenti, Spedizioni, Tessuti pregiati (Loro Piana, Solbiati) e i modelli disponibili nello Shop. Di cosa hai bisogno?`;
   };
 
   const suggestions = [
