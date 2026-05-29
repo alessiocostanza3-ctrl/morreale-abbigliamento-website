@@ -5,6 +5,15 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   
+  const [geminiApiKey, setGeminiApiKey] = useState(() => {
+    return localStorage.getItem("morreale_gemini_key") || "";
+  });
+
+  const handleSaveGeminiKey = () => {
+    localStorage.setItem("morreale_gemini_key", geminiApiKey);
+    alert("Chiave API Gemini salvata con successo. L'assistente virtuale Lino/Lana è ora attivo con intelligenza artificiale reale!");
+  };
+  
   // Navigation
   const [activeTab, setActiveTab] = useState("dashboard"); // dashboard, products, orders, bookings
   
@@ -385,6 +394,52 @@ export default function AdminPanel({ products, orders, bookings, onUpdateProduct
                 )}
               </div>
             </div>
+
+            {/* Virtual Assistant Settings */}
+            <div className="overview-card" style={{ marginTop: "30px", border: "1px solid var(--accent-terracotta)", textAlign: "left" }}>
+              <div className="overview-header" style={{ borderBottom: "1px solid var(--border-color)", paddingBottom: "15px" }}>
+                <h4 style={{ fontFamily: "var(--font-serif)", fontSize: "20px", color: "var(--text-primary)" }}>Configurazione Assistente Virtuale (Lino / Lana)</h4>
+                <span className="badge badge-terracotta">Integrazione Gemini</span>
+              </div>
+              <div style={{ padding: "20px 0 0 0", display: "flex", flexDirection: "column", gap: "15px" }}>
+                <p style={{ fontSize: "14px", color: "var(--text-secondary)", margin: "0", lineHeight: "1.6" }}>
+                  Il sito ospita in basso a destra un assistente virtuale (Lino durante la primavera/estate, Lana durante l'autunno/inverno) in grado di interagire in linguaggio naturale. 
+                  Inserisci qui sotto la tua <strong>Google Gemini API Key</strong> per attivare le risposte generate dall'Intelligenza Artificiale.
+                </p>
+                <div className="form-group" style={{ margin: "0" }}>
+                  <label className="form-label" htmlFor="gemini-key">Chiave API Google Gemini</label>
+                  <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                    <input 
+                      type="password" 
+                      id="gemini-key" 
+                      className="form-input" 
+                      style={{ flex: "1", minWidth: "250px" }}
+                      value={geminiApiKey} 
+                      onChange={(e) => setGeminiApiKey(e.target.value)} 
+                      placeholder="AIzaSy..." 
+                    />
+                    <button 
+                      type="button" 
+                      className="btn btn-primary" 
+                      onClick={handleSaveGeminiKey}
+                      style={{ padding: "12px 24px", height: "100%" }}
+                    >
+                      Salva Configurazione
+                    </button>
+                  </div>
+                  {geminiApiKey ? (
+                    <span style={{ fontSize: "12px", color: "var(--success)", display: "block", marginTop: "10px", fontWeight: "500" }}>
+                      ✓ Intelligenza Artificiale Gemini Attiva (la chiave è salvata in sicurezza nel browser).
+                    </span>
+                  ) : (
+                    <span style={{ fontSize: "12px", color: "var(--text-muted)", display: "block", marginTop: "10px" }}>
+                      Nessuna chiave configurata. Il chatbot utilizzerà risposte locali basate su parole chiave.
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
           </div>
         )}
 

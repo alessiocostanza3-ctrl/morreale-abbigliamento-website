@@ -6,6 +6,7 @@ import AppointmentForm from "./components/AppointmentForm";
 import Shop from "./components/Shop";
 import Cart from "./components/Cart";
 import AdminPanel from "./components/AdminPanel";
+import Chatbot from "./components/Chatbot";
 import { initialProducts } from "./data/initialProducts";
 import { OWNER_CONFIG } from "./config/ownerConfig";
 import "./App.css";
@@ -271,6 +272,9 @@ export default function App() {
         onRemoveFromCart={handleRemoveFromCart}
         onPlaceOrder={handlePlaceOrder}
       />
+
+      {/* Floating Chatbot Assistant (Lino / Lana) */}
+      <Chatbot />
 
       {/* Footer Section */}
       <footer className="footer">
